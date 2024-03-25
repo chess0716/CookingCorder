@@ -5,7 +5,7 @@ import okhttp3.MultipartBody
 import java.util.Date
 
 data class BoardDTO(
-    val num: String,
+    val num:   Int,
     val category: String,
     val title: String,
     val writer: User,
@@ -15,7 +15,7 @@ data class BoardDTO(
     val replyCnt: Int?,
     val totalprice: Int,
     val imageUrl: String,
-    var bitmap: Bitmap? = null
+
 )
 
 // MultipartFile 대신 사용할 클래스 (파일 업로드 시)
