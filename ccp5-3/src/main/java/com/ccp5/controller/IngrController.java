@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,20 +35,20 @@ public class IngrController {
     private IngrListService ilService;
     
     @Autowired
-    private  BoardService boardService;
+    private BoardService boardService;
 
     @GetMapping("/get_names")
-    public String getNamesByCategory(@RequestParam("categoryId") String categoryId) {
+    public ResponseEntity<String> getNamesByCategory(@RequestParam("categoryId") String categoryId) {
         // categoryId를 이용하여 해당하는 카테고리에 속하는 이름 목록을 데이터베이스에서 조회하고 반환
         List<DataDTO> names = ilService.findNames(categoryId);
         // 객체를 JSON 문자열로 변환
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             String jsonNames = objectMapper.writeValueAsString(names);
-            return jsonNames;
+            return ResponseEntity.ok(jsonNames);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
-            return "Error occurred while processing JSON";
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while processing JSON");
         }
     }
 
@@ -64,7 +65,7 @@ public class IngrController {
     }
     
     @PostMapping("/submit_recipe")
-    public String submitRecipe(@RequestParam("title") String title,
+    public ResponseEntity<String> submitRecipe(@RequestParam("title") String title,
                                @RequestParam("content") String content,
                                @RequestParam("image") MultipartFile file) {
         BoardDTO boardDTO = new BoardDTO();
@@ -77,32 +78,34 @@ public class IngrController {
                 boardDTO.setImageUrl(imageUrl);
             } catch (IOException e) {
                 e.printStackTrace();
-                return "error";
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while uploading image");
             }
         }
 
         boardService.insertBoard(boardDTO);
 
-        return "redirect:/index";
+        return ResponseEntity.ok("Recipe submitted successfully");
     }
 
     
     // 레시피 및 재료 수정
     @PostMapping("/submit_all_forms-update")
-    public void submitAllFormsUpdate(@RequestBody List<IngrBoard> ingredientForms) {
+    public ResponseEntity<Void> submitAllFormsUpdate(@RequestBody List<IngrBoard> ingredientForms) {
         boardService.updateIngredientForms(ingredientForms);
+        return ResponseEntity.ok().build();
     }
     
     @PutMapping("/submit_recipe_update")
-    public void submitRecipeUpdate(@RequestBody BoardDTO recipeForm) {
+    public ResponseEntity<Void> submitRecipeUpdate(@RequestBody BoardDTO recipeForm) {
         boardService.updateRecipeForm(recipeForm);
+        return ResponseEntity.ok().build();
     }
     
     // 레시피 및 재료 삭제
     @DeleteMapping("/delete/{num}")
-    public int deleteRecipe(@PathVariable int num, @RequestBody Map<String, String> requestBody) {
+    public ResponseEntity<Integer> deleteRecipe(@PathVariable int num, @RequestBody Map<String, String> requestBody) {
         String title = requestBody.get("title");
         boardService.deleteRecipe(num, title);
-        return num;
+        return ResponseEntity.ok(num);
     }
 }
