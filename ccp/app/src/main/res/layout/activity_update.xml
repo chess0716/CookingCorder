@@ -9,7 +9,7 @@
     tools:context=".DetailActivity">
 
     <EditText
-        android:id="@+id/insertTitle"
+        android:id="@+id/updateTitle"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_gravity="center"
@@ -20,7 +20,7 @@
         android:inputType="none" />
 
     <EditText
-        android:id="@+id/insertlWriter"
+        android:id="@+id/updateWriter"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_gravity="center"
@@ -31,7 +31,7 @@
         android:inputType="none" />
 
     <EditText
-        android:id="@+id/insertContent"
+        android:id="@+id/updateContent"
         android:layout_width="match_parent"
         android:layout_height="299dp"
         android:layout_gravity="center"
