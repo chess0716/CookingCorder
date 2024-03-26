@@ -29,7 +29,7 @@ class BoardAdapter(private val context: Context, private var boards: List<BoardD
 
         fun bind(board: BoardDTO) {
             binding.tvTitle.text = board.title
-            binding.tvContent.text = board.content ?: "내용 없음"
+
 
             val imageUrl = board.imageUrl?.let {
                 "http://10.100.103.73:8005$it" // 서버 주소와 이미지 경로 수정

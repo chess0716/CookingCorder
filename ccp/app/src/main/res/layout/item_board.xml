@@ -26,15 +26,7 @@
             android:textSize="48sp"
             android:textStyle="bold" />
 
-        <!-- 내용을 표시할 TextView -->
-        <TextView
-            android:id="@+id/tvContent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal|bottom"
-            android:layout_marginTop="100dp"
-            android:textColor="@android:color/black"
-            android:textSize="48sp" />
+
 
     </FrameLayout>
 </layout>
