@@ -66,5 +66,13 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="삭제" />
+
+        <Button
+            android:id="@+id/btnBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="100dp"
+            android:layout_weight="1"
+            android:text="뒤로가기" />
     </LinearLayout>
 </LinearLayout>

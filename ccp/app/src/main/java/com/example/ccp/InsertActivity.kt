@@ -1,11 +1,17 @@
 package com.example.ccp
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import com.example.ccp.databinding.ActivityInsertBinding
+import com.example.ccp.databinding.ActivityUpdateBinding
 
 class InsertActivity : AppCompatActivity() {
+    lateinit var binding: ActivityInsertBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_insert)
+        binding = ActivityInsertBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        binding.btnCancelInsert.setOnClickListener{finish()}
     }
 }

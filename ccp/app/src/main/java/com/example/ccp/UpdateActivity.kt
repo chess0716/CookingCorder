@@ -1,11 +1,16 @@
 package com.example.ccp
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import com.example.ccp.databinding.ActivityUpdateBinding
 
 class UpdateActivity : AppCompatActivity() {
+    lateinit var binding: ActivityUpdateBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_update)
+        binding = ActivityUpdateBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        binding.btnCancelUpdate.setOnClickListener{finish()}
     }
 }

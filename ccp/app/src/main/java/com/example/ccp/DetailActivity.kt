@@ -1,11 +1,11 @@
 package com.example.ccp
 
-
+import android.content.Intent
 import android.os.Bundle
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.RecyclerView
 import com.example.ccp.databinding.ActivityDetailBinding
-
 
 class DetailActivity : AppCompatActivity() {
 
@@ -13,15 +13,17 @@ class DetailActivity : AppCompatActivity() {
     private lateinit var detailTitleEditText: EditText
     private lateinit var detailWriterEditText: EditText
     private lateinit var detailContentEditText: EditText
+    private lateinit var detailIngrLists: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        detailTitleEditText = findViewById(R.id.insertTitle)
-        detailWriterEditText = findViewById(R.id.insertlWriter)
-        detailContentEditText = findViewById(R.id.insertContent)
+        detailTitleEditText = findViewById(R.id.detailTitle)
+        detailWriterEditText = findViewById(R.id.detailWriter) // Initialize detailWriterEditText
+        detailContentEditText = findViewById(R.id.detailContent)
+        detailIngrLists = findViewById(R.id.ingrLists)
 
         // Intent에서 DTO 객체의 정보를 받아옴
         val boardTitle = intent.getStringExtra("board_title")
@@ -32,5 +34,13 @@ class DetailActivity : AppCompatActivity() {
         detailTitleEditText.setText(boardTitle)
         detailWriterEditText.setText(boardWriter)
         detailContentEditText.setText(boardContent)
+
+        binding.btnGoUpdate.setOnClickListener {
+            val intent = Intent(this@DetailActivity, UpdateActivity::class.java)
+            // 필요하다면 업데이트에 필요한 데이터를 추가할 수 있습니다.
+            startActivity(intent)
+        }
+        binding.btnBack.setOnClickListener { finish() }
+
     }
 }
