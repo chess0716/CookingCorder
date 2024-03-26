@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+    <!-- TITLE 입력 -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TITLE" />
+
+    <EditText
+        android:id="@+id/titleEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter title" />
+
+    <!-- CONTENT 입력 -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="CONTENT" />
+
+    <EditText
+        android:id="@+id/contentEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter content"
+        android:lines="10"
+        android:minLines="6" />
+
+    <!-- 이미지 선택 버튼 -->
+    <Button
+        android:id="@+id/chooseImageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Choose Image" />
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+
+    <!-- 재료 선택 폼 -->
+    <include layout="@layout/item_ingredient" />
+
+    <!-- 폼 추가 버튼 -->
+    <Button
+        android:id="@+id/addFormButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add Ingredient" />
+
+    <!-- 전체 폼 제출 버튼 -->
+    <Button
+        android:id="@+id/submitAllButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Submit All Forms" />
+
+</LinearLayout>
