@@ -2,10 +2,13 @@ package com.example.ccp
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.view.MotionEvent
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ccp.databinding.ActivityDetailBinding
+import com.example.ccp.util.hideKeyboard
 
 class DetailActivity : AppCompatActivity() {
 
@@ -45,5 +48,16 @@ class DetailActivity : AppCompatActivity() {
         // 뒤로가기
         binding.btnBack.setOnClickListener { finish() }
 
+    }
+
+    // 화면 터치 시 키보드 숨기기
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        when (event?.action) {
+            // rawX, rawY는 스크린, 즉 화면의 좌표값, x, y는 View안의 좌표값
+            MotionEvent.ACTION_DOWN -> Log.d(">>", "Touch down x: ${event.x} , rawX: ${event.rawX}")
+            MotionEvent.ACTION_UP -> Log.d(">>", "Touch up")
+        }
+        hideKeyboard(this)
+        return super.onTouchEvent(event)
     }
 }

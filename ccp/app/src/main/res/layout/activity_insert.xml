@@ -17,7 +17,7 @@
         android:layout_marginRight="10dp"
         android:ems="10"
         android:hint="Title"
-        android:inputType="none" />
+        android:inputType="text" />
 
     <EditText
         android:id="@+id/insertWriter"
@@ -28,7 +28,7 @@
         android:layout_marginRight="10dp"
         android:ems="10"
         android:hint="Writer"
-        android:inputType="none" />
+        android:inputType="text" />
 
     <EditText
         android:id="@+id/insertContent"
@@ -40,7 +40,7 @@
         android:ems="10"
         android:gravity="start|top"
         android:hint="Content"
-        android:inputType="none" />
+        android:inputType="textMultiLine" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/ingrLists"
