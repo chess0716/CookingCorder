@@ -14,4 +14,6 @@ public interface DataRepository extends JpaRepository<DataDTO, Long> {
 	
 	@Query("SELECT d FROM DataDTO d WHERE d.category = :category")
     List<DataDTO> findByCategory(@Param("category") String category);
+	
+	List<DataDTO> findAll();
 }

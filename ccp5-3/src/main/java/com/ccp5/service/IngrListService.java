@@ -20,9 +20,13 @@ public class IngrListService {
 	public List<String> category() {
 		return dRepo.findDistinctCategories();
 	}
-
+	
 	public List<DataDTO> findNames(String categoryId) {
 		return dRepo.findByCategory(categoryId);
+	}
+	public List<DataDTO> findAllNames() {
+		
+		return dRepo.findAll();
 	}
 
 	// 입력 페이지에서 받은 재료들을 DB로 저장
@@ -37,5 +41,7 @@ public class IngrListService {
 	public void updateIngr(IngrBoard iboard) {
 		ilRepo.save(iboard);
 	}
+
+	
 	
 }

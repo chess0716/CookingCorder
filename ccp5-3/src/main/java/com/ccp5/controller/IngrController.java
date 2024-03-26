@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,11 +38,24 @@ public class IngrController {
     @Autowired
     private BoardService boardService;
 
-    @GetMapping("/get_names")
-    public ResponseEntity<String> getNamesByCategory(@RequestParam("categoryId") String categoryId) {
-        // categoryId를 이용하여 해당하는 카테고리에 속하는 이름 목록을 데이터베이스에서 조회하고 반환
-        List<DataDTO> names = ilService.findNames(categoryId);
-        // 객체를 JSON 문자열로 변환
+	/*
+	 * 안드로이드 클라이언트에서 계속 id 값을/get_names?categoryId=all"로 보냄 
+	 * 때문에 클라이언트엔 2byte의 빈배열만 전송됨
+	 * 특수 값 대신 서버로 특정 파라미터를 전달하지 않는 방식으로 모든 데이터 요청을 단순화.
+	 * 서버에서는 @RequestParam의 required 속성을 활용하여,
+	 *  파라미터 유무에 따라 모든 데이터를 반환하거나 특정 카테고리 데이터만 반환하는 로직을 구현
+	 */
+    @GetMapping(path = "/get_names", produces = MediaType.APPLICATION_JSON_VALUE)// 서버가 미디어타입을 text/plain 으로 받아서 수정
+    public ResponseEntity<String> getNamesByCategory(@RequestParam(value = "categoryId", required = false) String categoryId) {
+        List<DataDTO> names;
+        if (categoryId == null || categoryId.isEmpty() || "all".equals(categoryId)) {
+            // 'categoryId'가 제공되지 않았거나 'all'인 경우, 모든 데이터를 조회
+            names = ilService.findAllNames();
+        } else {
+            // 'categoryId'에 해당하는 데이터만 조회
+            names = ilService.findNames(categoryId);
+        }
+
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             String jsonNames = objectMapper.writeValueAsString(names);
@@ -51,6 +65,7 @@ public class IngrController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while processing JSON");
         }
     }
+
 
     // 레시피 및 재료 등록
     @PostMapping("/submit_all_forms")
