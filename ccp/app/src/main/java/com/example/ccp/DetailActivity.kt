@@ -35,11 +35,14 @@ class DetailActivity : AppCompatActivity() {
         detailWriterEditText.setText(boardWriter)
         detailContentEditText.setText(boardContent)
 
+        // 수정페이지로 이동하기
         binding.btnGoUpdate.setOnClickListener {
             val intent = Intent(this@DetailActivity, UpdateActivity::class.java)
             // 필요하다면 업데이트에 필요한 데이터를 추가할 수 있습니다.
             startActivity(intent)
         }
+
+        // 뒤로가기
         binding.btnBack.setOnClickListener { finish() }
 
     }

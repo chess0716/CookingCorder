@@ -3,7 +3,6 @@ package com.example.ccp
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.ccp.databinding.ActivityInsertBinding
-import com.example.ccp.databinding.ActivityUpdateBinding
 
 class InsertActivity : AppCompatActivity() {
     lateinit var binding: ActivityInsertBinding
@@ -12,6 +11,7 @@ class InsertActivity : AppCompatActivity() {
         binding = ActivityInsertBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.btnCancelInsert.setOnClickListener{finish()}
+        // 뒤로가기
+        binding.btnCancelInsert.setOnClickListener { finish() }
     }
 }

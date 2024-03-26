@@ -11,6 +11,7 @@ class UpdateActivity : AppCompatActivity() {
         binding = ActivityUpdateBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.btnCancelUpdate.setOnClickListener{finish()}
+        // 뒤로가기
+        binding.btnCancelUpdate.setOnClickListener { finish() }
     }
 }
