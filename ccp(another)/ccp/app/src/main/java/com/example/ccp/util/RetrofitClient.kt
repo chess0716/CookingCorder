@@ -2,13 +2,15 @@ package com.example.ccp.util
 
 import com.example.ccp.service.ApiService
 import com.example.ccp.service.IngrService
+import com.example.ccp.service.UserService
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitClient {
-    private const val BASE_URL = "http://211.220.50.127:8005/"
+
+    private const val BASE_URL = "http://10.100.103.73:8005/"
 
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
@@ -22,6 +24,7 @@ object RetrofitClient {
         Retrofit.Builder()
             .baseUrl(BASE_URL)
             .client(okHttpClient)
+
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
@@ -32,5 +35,8 @@ object RetrofitClient {
 
     val ingrService: IngrService by lazy {
         retrofit.create(IngrService::class.java)
+    }
+    val UserService: UserService by lazy {
+        retrofit.create(UserService::class.java)
     }
 }

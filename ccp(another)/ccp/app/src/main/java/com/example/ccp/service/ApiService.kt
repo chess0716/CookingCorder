@@ -1,6 +1,10 @@
 package com.example.ccp.service
 
 import com.example.ccp.model.BoardDTO
+import com.example.ccp.model.LoginRequest
+import com.example.ccp.model.LoginResponse
+import com.example.ccp.model.User
+import com.example.ccp.model.UserResponse
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.Body
@@ -9,7 +13,7 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Url
 
-interface ApiService {
+interface ApiService : UserService {
     @GET("/api/boards")
     fun getAllBoards(): Call<List<BoardDTO>>
 
@@ -24,6 +28,11 @@ interface ApiService {
 
     @POST("/api/boards/{num}/calculatePrice")
     fun updatePrice(@Path("num") boardNum: Int, @Body requestBody: Map<String?, Any?>?): Call<Int?>?
+    @POST("/api/join") // 여기에 @POST 어노테이션 추가
+    override fun join(@Body user: User?): Call<UserResponse?>?
+
+    @POST("/api/login")
+    override fun login(@Body loginRequest: LoginRequest?): Call<LoginResponse?>?
 
 
 }

@@ -48,6 +48,20 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+
+        // 회원가입 액티비티 이동
+        binding.appBarMain.signupButton.setOnClickListener {
+            val intent = Intent(this@MainActivity, JoinActivity::class.java)
+            startActivity(intent)
+        }
+
+        // 로그인 액티비티 이동
+        binding.appBarMain.loginButton.setOnClickListener {
+            val intent = Intent(this@MainActivity, LoginActivity::class.java)
+            startActivity(intent)
+        }
+
+
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment_content_main)

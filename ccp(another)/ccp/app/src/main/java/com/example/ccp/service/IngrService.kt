@@ -1,9 +1,11 @@
 package com.example.ccp.service
 
+
 import com.example.ccp.model.BoardDTO
 import com.example.ccp.model.DataDTO
 import com.example.ccp.model.IngrBoard
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -18,18 +20,19 @@ import retrofit2.http.Query
 
 interface IngrService {
 
-    @GET("/get_names")
+    @GET("/api/get_names")
     fun getNamesByCategory(@Query("categoryId") categoryId: String): Call<List<DataDTO>>
     @POST("/api/submit_all_forms")
-    fun submitAllForms(@Body forms: List<IngrBoard>): Call<String>
+    fun submitAllForms(@Body forms: List<IngrBoard>): Call<ApiResponse>
 
     @Multipart
     @POST("/api/submit_recipe")
     fun submitRecipe(
-        @Part("title") title: String,
-        @Part("content") content: String,
+        @Part("title") title: RequestBody,
+        @Part("content") content: RequestBody,
         @Part file: MultipartBody.Part
     ): Call<String>
+
 
     @POST("/api/submit_all_forms-update")
     fun submitAllFormsUpdate(@Body ingredientForms: List<IngrBoard>): Call<Void>

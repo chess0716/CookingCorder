@@ -7,6 +7,7 @@
     tools:context=".MainActivity">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/Theme.Ccp.AppBarOverlay">
@@ -15,8 +16,37 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/Theme.Ccp.PopupOverlay" />
+            android:background="@color/beige"
+            app:popupTheme="@style/Theme.Ccp.PopupOverlay">
+
+            <!-- 추가된 로그인 버튼 -->
+            <androidx.appcompat.widget.AppCompatButton
+                android:background="@color/beige"
+                android:id="@+id/login_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginEnd="8dp"
+                android:text="로그인"
+                android:textColor="@android:color/black"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <!-- 추가된 회원가입 버튼 -->
+            <androidx.appcompat.widget.AppCompatButton
+                android:background="@color/beige"
+                android:id="@+id/signup_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginEnd="8dp"
+                android:layout_toLeftOf="@id/login_button"
+                android:text="회원가입"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+        </androidx.appcompat.widget.Toolbar>
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -29,6 +59,7 @@
         android:layout_gravity="bottom|end"
         android:layout_marginEnd="@dimen/fab_margin"
         android:layout_marginBottom="16dp"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
+        app:srcCompat="@android:drawable/ic_input_add"
+        android:backgroundTint="@color/beige" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

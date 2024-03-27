@@ -10,7 +10,7 @@ import retrofit2.http.POST
 
 
 interface UserService {
-    @POST("/member/join")
+    @POST("/api/join")
     fun join(@Body user: User?): Call<UserResponse?>?
 
     @POST("/loginPro")

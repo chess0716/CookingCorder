@@ -4,17 +4,21 @@ package com.example.ccp.model
 
 
 data class User(
-    val id: Long?,
-    val username: String,
-    val name: String?,
-    val password: String?,
-    val email: String?,
+    var id: Long?,
+    var username: String,
+    var name: String?,
+    var password: String?,
+    var email: String?,
+    var role : String?,
 
-    val boards: Collection<BoardDTO>?
-)
+    )
 data class UserResponse(
     var message: String
-)
+) {
+    fun isSuccess(): Boolean {
+        return true
+    }
+}
 
 data class LoginRequest(
     var username: String,
