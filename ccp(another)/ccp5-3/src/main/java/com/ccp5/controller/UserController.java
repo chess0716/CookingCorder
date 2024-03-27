@@ -43,27 +43,58 @@ public class UserController {
     }
 
 
-    @GetMapping("/member/login") // 로그인 페이지 경로 수정
+    @GetMapping("/api/login") // 로그인 페이지 경로 수정
     public String login() {
         logger.info("Accessing login page"); // 로그 출력
         return "member/login";
     }
     
-    @PostMapping("/loginPro")
-    public ResponseEntity<String> loginProcess(@RequestParam("username") String username, @RequestParam("password") String password, HttpSession session) {
+    @PostMapping("/api/login")
+    public ResponseEntity<String> loginProcess(@RequestBody Map<String, String> credentials, HttpSession session) {
+        String username = credentials.get("username");
+        String password = credentials.get("password");
+
         logger.info("Attempting login for username: {}", username); // 로그 출력
         User user = userRepository.findByUsername(username);
-        if (user != null && passwordEncoder.matches(password, user.getPassword())) {
-            // 세션에 사용자 이름을 저장합니다.
+        if (user != null && password.equals(user.getPassword())) { // 비밀번호 비교
+           
             session.setAttribute("username", username);
 
-            // 로그인 성공 후 리다이렉트할 페이지를 지정합니다.
-            return new ResponseEntity<>("Login successful", HttpStatus.OK); // 로그인 성공
+           
+            Map<String, Object> responseMap = new HashMap<>();
+            responseMap.put("message", "Login successful");
+
+          
+            String jsonResponse;
+            try {
+                jsonResponse = objectMapper.writeValueAsString(responseMap);
+            } catch (JsonProcessingException e) {
+                log.error("Error converting response to JSON", e);
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error converting response to JSON");
+            }
+
+            // ResponseEntity를 사용하여 JSON 형식의 응답 반환
+            return ResponseEntity.ok(jsonResponse);
         } else {
             // 로그인 실패 시 실패 이유를 반환합니다.
-            return new ResponseEntity<>("Invalid username or password", HttpStatus.UNAUTHORIZED); // 로그인 실패
+            // 응답 데이터를 Map 형식으로 구성
+            Map<String, Object> responseMap = new HashMap<>();
+            responseMap.put("message", "Invalid username or password");
+
+            // ObjectMapper를 사용하여 Map을 JSON 문자열로 변환
+            String jsonResponse;
+            try {
+                jsonResponse = objectMapper.writeValueAsString(responseMap);
+            } catch (JsonProcessingException e) {
+                log.error("Error converting response to JSON", e);
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error converting response to JSON");
+            }
+
+            // ResponseEntity를 사용하여 JSON 형식의 응답 반환
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(jsonResponse);
         }
     }
+
 
     @GetMapping("/api/join")
     public String joinForm() {

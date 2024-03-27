@@ -24,7 +24,6 @@ public class IngrListService {
 	public List<DataDTO> findNames(String categoryId) {
 		return dRepo.findByCategory(categoryId);
 	}
-	
 	public List<DataDTO> findAllNames() {
 		
 		return dRepo.findAll();

@@ -127,6 +127,11 @@ public class BoardService {
 	        return "/images/" + fileName;
 	    }
 
+	  public List<BoardDTO> searchByTitle(String title) {
+	 
+	        return boardRepo.findByTitleContaining(title);
+	    }
+	
 	
 	}
 

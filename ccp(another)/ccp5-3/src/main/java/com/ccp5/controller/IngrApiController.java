@@ -78,6 +78,7 @@ public class IngrApiController {
         String jsonResponse;
         try {
             jsonResponse = objectMapper.writeValueAsString(responseMap);
+            log.info("All forms submitted successfully");
         } catch (JsonProcessingException e) {
             log.error("Error converting response to JSON", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error converting response to JSON");
@@ -95,30 +96,28 @@ public class IngrApiController {
         boardDTO.setTitle(title);
         boardDTO.setContent(content);
 
-        if (!file.isEmpty()) {
-            try {
+        try {
+            if (!file.isEmpty()) {
                 String imageUrl = boardService.uploadAndResizeImage(file);
                 boardDTO.setImageUrl(imageUrl);
-            } catch (IOException e) {
-                log.error("Error occurred while uploading image", e);
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while uploading image");
             }
+        } catch (IOException e) {
+            log.error("Error occurred while uploading image", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while uploading image");
         }
 
-        boardService.insertBoard(boardDTO);
-
-        // JSON 형식으로 응답 반환
-        Map<String, String> responseMap = new HashMap<>();
-        responseMap.put("message", "Recipe submitted successfully");
-        ObjectMapper objectMapper = new ObjectMapper();
-        String jsonResponse;
         try {
-            jsonResponse = objectMapper.writeValueAsString(responseMap);
-        } catch (JsonProcessingException e) {
-            log.error("Error converting response to JSON", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error converting response to JSON");
+            boardService.insertBoard(boardDTO);
+            log.info("Recipe submitted successfully: {}", title);
+            Map<String, String> responseMap = new HashMap<>();
+            responseMap.put("message", "Recipe submitted successfully");
+            ObjectMapper objectMapper = new ObjectMapper();
+            String jsonResponse = objectMapper.writeValueAsString(responseMap);
+            return ResponseEntity.ok(jsonResponse);
+        } catch (Exception e) {
+            log.error("Error occurred while submitting recipe", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while submitting recipe");
         }
-        return ResponseEntity.ok(jsonResponse);
     }
 
 
