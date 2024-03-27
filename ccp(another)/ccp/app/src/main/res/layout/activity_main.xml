@@ -22,32 +22,46 @@
             android:layout_height="200dp"
             android:scaleType="centerCrop"
             android:src="@drawable/display"
-            android:layout_below="@id/toolbar"/>
+            android:layout_below="@id/toolbar"
+            tools:ignore="NotSibling" />
 
-        <TextView
-            android:id="@+id/textViewTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/imageView"
-            android:padding="16dp"
-            android:text="당신의 한 끼는 얼마일까요?"
-            android:textSize="24sp" />
 
-        <TextView
-            android:id="@+id/textViewDescription"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/textViewTitle"
-            android:padding="16dp"
-            android:text="1인 가구 및 소수 가정을 위한 레시피 공유 커뮤니티" />
+
+        <!-- 검색 상자 -->
+
+        <!-- 검색 버튼 -->
 
         <!-- recyclerViewBoards -->
+
+        <EditText
+            android:id="@+id/editTextSearch"
+            android:layout_width="317dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/imageView"
+            android:layout_margin="20dp"
+            android:layout_marginTop="30dp"
+            android:hint="검색어를 입력하세요"
+            android:padding="16dp" />
+
+        <Button
+            android:id="@+id/btnSearch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/editTextSearch"
+            android:layout_marginStart="-8dp"
+            android:layout_marginTop="-70dp"
+            android:layout_toEndOf="@id/editTextSearch"
+            android:padding="5sp"
+            android:text="검색"
+            android:textSize="18sp" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewBoards"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:layout_below="@id/textViewDescription" />
+            android:layout_below="@id/editTextSearch"
+            android:layout_marginTop="20dp"
+            android:padding="16dp" />
 
 
         <include
@@ -57,6 +71,7 @@
             android:layout_height="match_parent" />
 
     </RelativeLayout>
+
     <!-- RelativeLayout 종료 -->
 
     <!-- 네비게이션 뷰 -->
@@ -68,5 +83,6 @@
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header_main"
         app:menu="@menu/activity_main_drawer" />
+
 
 </androidx.drawerlayout.widget.DrawerLayout>

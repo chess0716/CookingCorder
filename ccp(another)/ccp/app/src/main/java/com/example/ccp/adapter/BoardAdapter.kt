@@ -32,7 +32,7 @@ class BoardAdapter(private val context: Context, private var boards: List<BoardD
 
 
             val imageUrl = board.imageUrl?.let {
-                "http://10.100.103.73:8005$it" // 서버 주소와 이미지 경로 수정
+                "http://222.96.80.225:8005$it" // 서버 주소와 이미지 경로 수정
             }
 
             if (!imageUrl.isNullOrEmpty()) {

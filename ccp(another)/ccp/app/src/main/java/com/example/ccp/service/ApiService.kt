@@ -11,6 +11,7 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.Query
 import retrofit2.http.Url
 
 interface ApiService : UserService {
@@ -34,4 +35,6 @@ interface ApiService : UserService {
 
     @POST("/api/login")
     override fun login(@Body loginRequest: LoginRequest?): Call<LoginResponse?>?
+    @GET("/api/boards/search")
+    fun searchBoards(@Query("title") title: String): Call<List<BoardDTO>>
 }
