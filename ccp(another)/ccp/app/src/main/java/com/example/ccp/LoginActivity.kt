@@ -1,5 +1,6 @@
 package com.example.ccp
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -37,9 +38,16 @@ class LoginActivity : AppCompatActivity() {
 
     private fun loginUser(loginRequest: LoginRequest) {
         userService.login(loginRequest)?.enqueue(object : Callback<LoginResponse?> {
-            override fun onResponse(call: Call<LoginResponse?>, response: Response<LoginResponse?>) {
+            override fun onResponse(
+                call: Call<LoginResponse?>,
+                response: Response<LoginResponse?>
+            ) {
                 if (response.isSuccessful) {
                     Toast.makeText(this@LoginActivity, "로그인 성공", Toast.LENGTH_SHORT).show()
+                    // 로그인이 성공하면 메인 액티비티로 이동
+                    val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                    startActivity(intent)
+                    finish() // 로그인 액티비티 종료
                 } else {
                     Toast.makeText(this@LoginActivity, "로그인 실패", Toast.LENGTH_SHORT).show()
                 }

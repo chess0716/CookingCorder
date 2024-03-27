@@ -28,11 +28,10 @@ interface ApiService : UserService {
 
     @POST("/api/boards/{num}/calculatePrice")
     fun updatePrice(@Path("num") boardNum: Int, @Body requestBody: Map<String?, Any?>?): Call<Int?>?
-    @POST("/api/join") // 여기에 @POST 어노테이션 추가
+
+    @POST("/api/join")
     override fun join(@Body user: User?): Call<UserResponse?>?
 
     @POST("/api/login")
     override fun login(@Body loginRequest: LoginRequest?): Call<LoginResponse?>?
-
-
 }

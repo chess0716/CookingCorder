@@ -8,12 +8,11 @@ import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.POST
 
-
 interface UserService {
     @POST("/api/join")
     fun join(@Body user: User?): Call<UserResponse?>?
 
-    @POST("/loginPro")
+    @POST("/api/login")
     fun login(@Body loginRequest: LoginRequest?): Call<LoginResponse?>?
-
 }
+
