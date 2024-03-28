@@ -42,6 +42,7 @@ class DetailActivity : AppCompatActivity() {
         if (num != -1) {
             loadData(num)
             loadIngredients(num)
+            loadTotalPrice(num)
         }
 
         // 수정페이지로 이동하기
@@ -56,6 +57,7 @@ class DetailActivity : AppCompatActivity() {
 
     }
 
+    // 서버로부터 게시글 데이터 불러오기
     private fun loadData(num: Int) {
         apiService.getBoardByNum(num)?.enqueue(object : Callback<BoardDTO?> {
             override fun onResponse(call: Call<BoardDTO?>, response: Response<BoardDTO?>) {
@@ -78,9 +80,13 @@ class DetailActivity : AppCompatActivity() {
         })
     }
 
+    // 서버로부터 입력받은 재료 목록 불러오기
     private fun loadIngredients(num: Int) {
         apiService.getIngredientsForBoard(num).enqueue(object : Callback<List<IngrBoard>> {
-            override fun onResponse(call: Call<List<IngrBoard>>, response: Response<List<IngrBoard>>) {
+            override fun onResponse(
+                call: Call<List<IngrBoard>>,
+                response: Response<List<IngrBoard>>
+            ) {
                 val ingrBoards = response.body()
                 // 재료 목록이 비어있는지 확인하고 UI에 표시
                 if (ingrBoards != null && ingrBoards.isNotEmpty()) {
@@ -105,13 +111,37 @@ class DetailActivity : AppCompatActivity() {
         })
     }
 
+    // 서버로부터 재료 총 가격 데이터 불러오기
+    private fun loadTotalPrice(num: Int) {
+        apiService.getTotalPrice(num).enqueue(object : Callback<Int> {
+            override fun onResponse(call: Call<Int>, response: Response<Int>) {
+                if (response.isSuccessful) {
+                    val totalPrice = response.body()
+                    Log.d("TotalPrice","${totalPrice}")
+                    // 성공적으로 응답을 받았을 때의 처리
+                } else {
+                    // 서버로부터 응답을 받지 못했을 때의 처리
+                    Log.e("TotalPrice", "TotalPrice is empty")
+                }
+            }
+
+            override fun onFailure(call: Call<Int>, t: Throwable) {
+                // 통신 실패 시의 처리
+                Log.e("TotalPrice", "Failed to load TotalPrice: ${t.message}")
+            }
+        })
+    }
+
+    // 불러온 게시글 데이터를 모바일 화면에 입출력
     private fun updateUI(title: String?, user: User?, content: String?) {
         // 받아온 게시물 정보를 UI에 반영합니다.
         binding.detailTitle.text = Editable.Factory.getInstance().newEditable(title)
-        binding.detailWriter.text = Editable.Factory.getInstance().newEditable(user?.name ?: "Unknown")
+        binding.detailWriter.text =
+            Editable.Factory.getInstance().newEditable(user?.name ?: "Unknown")
         binding.detailContent.text = Editable.Factory.getInstance().newEditable(content)
     }
 
+    // 불러온 재료 리스트 데이터를 모바일 화면에 입출력
     private fun displayIngredients(ingrBoards: List<IngrBoard>) {
         // 1. RecyclerView에 표시할 재료 목록 데이터(ingrBoards)를 사용하여 RecyclerView의 Adapter를 생성
         val adapter = IngrBoardAdapter(this)

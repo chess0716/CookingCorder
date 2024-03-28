@@ -43,4 +43,7 @@ interface ApiService {
     // 게시물에 대한 재료 목록을 가져오는 메서드 추가
     @GET("/api/boards/{num}/ingredients")
     fun getIngredientsForBoard(@Path("num") num: Int): Call<List<IngrBoard>>
+
+    @GET("/api/boards/{num}/totalPrice")
+    fun getTotalPrice(@Path("num") num: Int): Call<Int>
 }
