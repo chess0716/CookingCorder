@@ -1,5 +1,6 @@
 package com.example.ccp.service
 
+import com.example.ccp.model.IngrBoard
 import com.example.ccp.model.BoardDTO
 import com.example.ccp.model.LoginRequest
 import com.example.ccp.model.LoginResponse
@@ -14,7 +15,7 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 import retrofit2.http.Url
 
-interface ApiService : UserService {
+interface ApiService {
     @GET("/api/boards")
     fun getAllBoards(): Call<List<BoardDTO>>
 
@@ -22,19 +23,24 @@ interface ApiService : UserService {
     fun getImage(@Url imageUrl: String): Call<ResponseBody>
 
     @GET("/api/boards/{num}")
-    fun getBoardByNum(@Path("num") num: Int): Call<BoardDTO?>?
+    fun getBoardByNum(@Path("num") num: Int): Call<BoardDTO?>
 
     @POST("/api/boards")
-    fun insertBoard(@Body boardDTO: BoardDTO?): Call<Void?>?
+    fun insertBoard(@Body boardDTO: BoardDTO?): Call<Void?>
 
     @POST("/api/boards/{num}/calculatePrice")
-    fun updatePrice(@Path("num") boardNum: Int, @Body requestBody: Map<String?, Any?>?): Call<Int?>?
+    fun updatePrice(@Path("num") boardNum: Int, @Body requestBody: Map<String?, Any?>?): Call<Int?>
 
-    @POST("/api/join")
-    override fun join(@Body user: User?): Call<UserResponse?>?
-
-    @POST("/api/login")
-    override fun login(@Body loginRequest: LoginRequest?): Call<LoginResponse?>?
     @GET("/api/boards/search")
     fun searchBoards(@Query("title") title: String): Call<List<BoardDTO>>
+
+    @POST("/api/join")
+    fun join(@Body user: User?): Call<UserResponse?>
+
+    @POST("/api/login")
+    fun login(@Body loginRequest: LoginRequest?): Call<LoginResponse?>
+
+    // 게시물에 대한 재료 목록을 가져오는 메서드 추가
+    @GET("/api/boards/{num}/ingredients")
+    fun getIngredientsForBoard(@Path("num") num: Int): Call<List<IngrBoard>>
 }

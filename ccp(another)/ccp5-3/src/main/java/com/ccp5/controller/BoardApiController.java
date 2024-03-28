@@ -16,8 +16,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ccp5.dto.BoardDTO;
+import com.ccp5.dto.IngrBoard;
 import com.ccp5.repository.BoardRepository;
 import com.ccp5.service.BoardService;
+import com.ccp5.service.IngrListService;
 
 @RestController
 @RequestMapping("/api/boards")
@@ -27,6 +29,8 @@ public class BoardApiController {
 	BoardRepository boardRepository;
     @Autowired
     private BoardService boardService;
+    @Autowired
+    private IngrListService ilService;
     @GetMapping("/search")
     public ResponseEntity<List<BoardDTO>> searchBoards(@RequestParam String title) {
         // 검색 로직 구현
@@ -42,6 +46,7 @@ public class BoardApiController {
     @GetMapping("/{num}")
     public ResponseEntity<BoardDTO> getBoardByNum(@PathVariable int num) {
         BoardDTO board = boardService.getBoardByNum(num);
+        List<IngrBoard> ingrBoards = ilService.findByTitle(board.getTitle());
         if (board != null) {
             return ResponseEntity.ok(board);
         } else {

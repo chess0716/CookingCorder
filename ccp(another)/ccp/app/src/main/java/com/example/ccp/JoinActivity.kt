@@ -27,7 +27,7 @@ class JoinActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         // UserService 초기화
-        userService = RetrofitClient.apiService
+        userService = RetrofitClient.userService
         // 회원가입 버튼 클릭 이벤트 처리
         binding.btnJoin.setOnClickListener {
             val username = binding.etIDJoin.text.toString()

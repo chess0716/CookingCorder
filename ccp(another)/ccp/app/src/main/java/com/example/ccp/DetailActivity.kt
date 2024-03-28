@@ -7,9 +7,12 @@ import android.util.Log
 import android.view.MotionEvent
 import android.widget.Switch
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.ccp.adapter.BoardAdapter
+import com.example.ccp.adapter.IngrBoardAdapter
 import com.example.ccp.databinding.ActivityDetailBinding
 import com.example.ccp.model.BoardDTO
+import com.example.ccp.model.IngrBoard
 import com.example.ccp.model.User
 import com.example.ccp.service.ApiService
 import com.example.ccp.util.RetrofitClient
@@ -74,11 +77,42 @@ class DetailActivity : AppCompatActivity() {
         })
     }
 
+    private fun loadIngredients(num: Int) {
+        apiService.getIngredientsForBoard(num).enqueue(object : Callback<List<IngrBoard>> {
+            override fun onResponse(call: Call<List<IngrBoard>>, response: Response<List<IngrBoard>>) {
+                val ingrBoards = response.body()
+                // 재료 목록이 비어있는지 확인하고 UI에 표시
+                if (ingrBoards != null && ingrBoards.isNotEmpty()) {
+                    // 재료 목록을 UI에 표시하는 함수 호출
+                    displayIngredients(ingrBoards)
+                } else {
+                    // 재료 목록이 비어있을 때 처리
+                    Log.e("DetailActivity", "Ingredient list is empty")
+                }
+            }
+
+            override fun onFailure(call: Call<List<IngrBoard>>, t: Throwable) {
+                Log.e("DetailActivity", "Failed to load ingredients: ${t.message}")
+            }
+        })
+    }
+
     private fun updateUI(title: String?, user: User?, content: String?) {
         // 받아온 게시물 정보를 UI에 반영합니다.
         binding.detailTitle.text = Editable.Factory.getInstance().newEditable(title)
         binding.detailWriter.text = Editable.Factory.getInstance().newEditable(user?.name ?: "Unknown")
         binding.detailContent.text = Editable.Factory.getInstance().newEditable(content)
+    }
+
+    private fun displayIngredients(ingrBoards: List<IngrBoard>) {
+        // 1. RecyclerView에 표시할 재료 목록 데이터(ingrBoards)를 사용하여 RecyclerView의 Adapter를 생성
+        val adapter = IngrBoardAdapter(this)
+
+        // 2. RecyclerView에 Adapter를 설정하고, RecyclerView에 연결
+        binding.recyclerViewIngredients.adapter = adapter
+
+        // 3. RecyclerView의 LayoutManager를 설정하여 아이템의 배치 방법을 결정
+        binding.recyclerViewIngredients.layoutManager = LinearLayoutManager(this)
     }
 
 

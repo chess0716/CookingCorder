@@ -18,4 +18,14 @@ data class IngrBoard(
         this.name = name
         this.unit = unit
     }
+
+    // name 속성 설정 메서드
+    fun setIngredientName(name: String) {
+        this.name = name
+    }
+
+    // unit 속성 설정 메서드
+    fun setIngredientUnit(unit: Int) {
+        this.unit = unit
+    }
 }

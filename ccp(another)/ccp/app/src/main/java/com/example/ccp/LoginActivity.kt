@@ -25,7 +25,7 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         // UserService 초기화
-        userService = RetrofitClient.apiService
+        userService = RetrofitClient.userService
 
         // 로그인 버튼 클릭 이벤트 처리
         binding.btnLogin.setOnClickListener {

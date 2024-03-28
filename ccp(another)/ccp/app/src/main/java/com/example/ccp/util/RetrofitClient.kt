@@ -10,7 +10,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitClient {
 
-    private const val BASE_URL = "http://222.96.80.225:8005/"
 
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
@@ -36,7 +35,7 @@ object RetrofitClient {
     val ingrService: IngrService by lazy {
         retrofit.create(IngrService::class.java)
     }
-    val UserService: UserService by lazy {
+    val userService: UserService by lazy {
         retrofit.create(UserService::class.java)
     }
 }
