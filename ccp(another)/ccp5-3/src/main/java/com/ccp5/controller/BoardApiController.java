@@ -46,13 +46,24 @@ public class BoardApiController {
     @GetMapping("/{num}")
     public ResponseEntity<BoardDTO> getBoardByNum(@PathVariable int num) {
         BoardDTO board = boardService.getBoardByNum(num);
-        List<IngrBoard> ingrBoards = ilService.findByTitle(board.getTitle());
         if (board != null) {
             return ResponseEntity.ok(board);
         } else {
             return ResponseEntity.notFound().build();
         }
     }
+    
+    @GetMapping("/{num}/ingredients")
+    public ResponseEntity<List<IngrBoard>> getIngredientsForBoard(@PathVariable int num) {
+    	BoardDTO board = boardService.getBoardByNum(num);
+        List<IngrBoard> ingrBoards = ilService.findByTitle(board.getTitle());
+        if (ingrBoards != null && !ingrBoards.isEmpty()) {
+            return ResponseEntity.ok(ingrBoards);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    
 
     @PostMapping
     public ResponseEntity<Void> insertBoard(@RequestBody BoardDTO boardDTO) {

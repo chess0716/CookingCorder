@@ -41,6 +41,7 @@ class DetailActivity : AppCompatActivity() {
         val num = intent.getIntExtra("board_id", -1)
         if (num != -1) {
             loadData(num)
+            loadIngredients(num)
         }
 
         // 수정페이지로 이동하기
@@ -83,7 +84,14 @@ class DetailActivity : AppCompatActivity() {
                 val ingrBoards = response.body()
                 // 재료 목록이 비어있는지 확인하고 UI에 표시
                 if (ingrBoards != null && ingrBoards.isNotEmpty()) {
-                    // 재료 목록을 UI에 표시하는 함수 호출
+                    // IngrBoard 객체의 리스트를 반복문으로 순회합니다.
+                    for (ingrBoard in ingrBoards) {
+                        val name = ingrBoard.name
+                        val unit = ingrBoard.unit
+                        // 이름과 단위에 접근하여 필요한 작업을 수행합니다. 예를 들어, 로그에 출력하거나 다른 작업을 수행할 수 있습니다.
+                        Log.d("DetailActivityLists", "재료 이름: $name, 단위: $unit")
+                    }
+                    // UI에 재료를 표시합니다.
                     displayIngredients(ingrBoards)
                 } else {
                     // 재료 목록이 비어있을 때 처리
