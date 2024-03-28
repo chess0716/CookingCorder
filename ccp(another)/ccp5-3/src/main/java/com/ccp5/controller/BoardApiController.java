@@ -39,12 +39,14 @@ public class BoardApiController {
 		return ResponseEntity.ok(searchResults);
 	}
 
+	// 메인 화면에 게시글들 출력하는 데이터 모바일로 보내기
 	@GetMapping
 	public ResponseEntity<List<BoardDTO>> getAllBoards() {
 		List<BoardDTO> boards = boardService.getAllBoards();
 		return ResponseEntity.ok(boards);
 	}
 
+	// 모바일로 게시글 데이터 보내기
 	@GetMapping("/{num}")
 	public ResponseEntity<BoardDTO> getBoardByNum(@PathVariable int num) {
 		BoardDTO board = boardService.getBoardByNum(num);
@@ -55,6 +57,7 @@ public class BoardApiController {
 		}
 	}
 
+	// 모바일로 재료 리스트 데이터 보내기
 	@GetMapping("/{num}/ingredients")
 	public ResponseEntity<List<IngrBoard>> getIngredientsForBoard(@PathVariable int num) {
 		BoardDTO board = boardService.getBoardByNum(num);
@@ -66,6 +69,7 @@ public class BoardApiController {
 		}
 	}
 
+	// 모바일로 총 가격 데이터 보내기
 	@GetMapping("/{num}/totalPrice")
 	public ResponseEntity<Integer> getTotalPrice(@PathVariable int num) {
 		Integer totalPrice = boardRepository.calculateTotalPriceByNum(num);
