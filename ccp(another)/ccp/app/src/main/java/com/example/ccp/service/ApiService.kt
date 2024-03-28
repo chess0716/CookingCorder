@@ -1,6 +1,7 @@
 package com.example.ccp.service
 
 import com.example.ccp.model.BoardDTO
+import com.example.ccp.model.Category
 import com.example.ccp.model.LoginRequest
 import com.example.ccp.model.LoginResponse
 import com.example.ccp.model.User
@@ -15,7 +16,7 @@ import retrofit2.http.Query
 import retrofit2.http.Url
 
 interface ApiService : UserService {
-    @GET("/api/boards")
+    @GET("/api/boards/list")
     fun getAllBoards(): Call<List<BoardDTO>>
 
     @GET
@@ -37,4 +38,6 @@ interface ApiService : UserService {
     override fun login(@Body loginRequest: LoginRequest?): Call<LoginResponse?>?
     @GET("/api/boards/search")
     fun searchBoards(@Query("title") title: String): Call<List<BoardDTO>>
+
+
 }

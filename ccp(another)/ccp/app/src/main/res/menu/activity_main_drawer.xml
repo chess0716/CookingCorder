@@ -5,15 +5,15 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_home"
+            android:id="@+id/nav_category1"
             android:icon="@drawable/ic_menu_camera"
-            android:title="@string/menu_home" />
+            android:title="찜/찌개" />
         <item
-            android:id="@+id/nav_gallery"
+            android:id="@+id/nav_category2"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="@string/menu_gallery" />
+            android:title="면류" />
         <item
-            android:id="@+id/nav_slideshow"
+            android:id="@+id/nav_category3"
             android:icon="@drawable/ic_menu_slideshow"
             android:title="@string/menu_slideshow" />
     </group>

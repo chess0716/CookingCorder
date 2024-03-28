@@ -26,6 +26,8 @@
                 android:orientation="vertical"
                 android:layout_margin="10dp">
 
+
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -49,6 +51,12 @@
                     android:hint="Enter content"
                     android:inputType="textMultiLine"
                     android:minLines="5" />
+
+                <Spinner
+                    android:id="@+id/spinnerRecipeCategory"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"/>
 
                 <Button
                     android:id="@+id/btnUpload"
@@ -80,11 +88,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
-
                         <Spinner
                             android:id="@+id/spinnerCategory"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
+                            android:layout_width="151dp"
+                            android:layout_height="34dp"
                             android:layout_weight="1"
                             android:prompt="@string/category_prompt" />
 

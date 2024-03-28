@@ -5,9 +5,10 @@ import okhttp3.MultipartBody
 import java.util.Date
 import java.util.Locale
 
+
 data class BoardDTO(
-    val num:   Int,
-    val category: String,
+    val num: Int,
+    val category: Category,
     val title: String,
     val writer: User,
     val content: String,
@@ -16,7 +17,6 @@ data class BoardDTO(
     val replyCnt: Int?,
     val totalprice: Int,
     val imageUrl: String,
-
 ){
 
     val searchableTitle: String

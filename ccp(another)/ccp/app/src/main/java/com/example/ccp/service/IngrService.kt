@@ -2,6 +2,7 @@ package com.example.ccp.service
 
 
 import com.example.ccp.model.BoardDTO
+import com.example.ccp.model.Category
 import com.example.ccp.model.DataDTO
 import com.example.ccp.model.IngrBoard
 import okhttp3.MultipartBody
@@ -30,7 +31,8 @@ interface IngrService {
     fun submitRecipe(
         @Part("title") title: RequestBody,
         @Part("content") content: RequestBody,
-        @Part file: MultipartBody.Part
+        @Part("categoryId") categoryId: RequestBody,
+        @Part image: MultipartBody.Part
     ): Call<String>
 
 
@@ -42,4 +44,11 @@ interface IngrService {
 
     @DELETE("/api/delete/{num}")
     fun deleteRecipe(@Path("num") num: Int, @Body requestBody: Map<String, String>): Call<Int>
+
+    @GET("/api/categories")
+    fun getAllCategories(): Call<List<Category>>
+
+    // 특정 카테고리에 속하는 게시물들을 가져오는 메서드
+    @GET("/api/boards/category/{categoryId}")
+    fun getBoardsByCategory(@Path("categoryId") categoryId: Long): Call<List<BoardDTO>>
 }

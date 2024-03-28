@@ -5,6 +5,7 @@ import android.content.ContentResolver
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
@@ -17,10 +18,13 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.example.ccp.databinding.ActivityInsertBinding
+import com.example.ccp.databinding.NewFormLayoutBinding
+import com.example.ccp.model.Category
+
 import com.example.ccp.model.DataDTO
 import com.example.ccp.model.IngrBoard
 import com.example.ccp.service.ApiResponse
-import com.example.ccp.databinding.NewFormLayoutBinding
+
 import com.example.ccp.util.RetrofitClient
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -38,6 +42,7 @@ class InsertActivity : AppCompatActivity() {
     private lateinit var binding: ActivityInsertBinding
     private var imageUrl: Uri? = null
     private lateinit var getContent: ActivityResultLauncher<String>
+    private var categoryMap: Map<String, Long> = emptyMap()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,6 +52,8 @@ class InsertActivity : AppCompatActivity() {
         getContent = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
             uri?.let { uploadImage(it) }
         }
+
+        loadRecipeCategories()
 
         loadCategories()
 
@@ -59,14 +66,53 @@ class InsertActivity : AppCompatActivity() {
         }
 
         binding.btnSubmitAll.setOnClickListener {
-            if (imageUrl != null) {
-                submitAllForms()
-                submitRecipe()
-            } else {
+            val selectedCategoryName = binding.spinnerRecipeCategory.selectedItem.toString()
+            val categoryId = categoryMap[selectedCategoryName]
+
+            if (imageUrl == null) {
                 Toast.makeText(this, "Please upload an image", Toast.LENGTH_SHORT).show()
+            } else if (categoryId == null) {
+                Toast.makeText(this, "Please select a category", Toast.LENGTH_SHORT).show()
+            } else {
+                // 모든 입력 폼을 제출하는 함수 호출
+                submitAllForms()
+
+                // 레시피를 제출하는 함수 호출, 이때 카테고리 ID를 파라미터로 전달
+                submitRecipe(categoryId)
+
             }
         }
+
     }
+    private fun loadRecipeCategories() {
+        RetrofitClient.ingrService.getAllCategories().enqueue(object : Callback<List<Category>> {
+            override fun onResponse(call: Call<List<Category>>, response: Response<List<Category>>) {
+                if (response.isSuccessful) {
+                    // 서버로부터 카테고리 목록 받아옴
+                    val categories = response.body() ?: emptyList()
+
+                    // 스피너에 카테고리 목록 설정
+                    val categoryNames = categories.map { it.name }.toMutableList()
+                    categoryNames.add(0, "카테고리 선택") // 첫 번째 항목으로 기본값 추가
+
+                    // 카테고리 맵 초기화
+                    categoryMap = categories.associate { it.name to it.id }.toMutableMap()
+
+                    val adapter = ArrayAdapter(this@InsertActivity,
+                        android.R.layout.simple_spinner_dropdown_item, categoryNames)
+
+                    // 레시피 카테고리 스피너에 어댑터 설정
+                    binding.spinnerRecipeCategory.adapter = adapter
+                }
+            }
+
+            override fun onFailure(call: Call<List<Category>>, t: Throwable) {
+                Toast.makeText(this@InsertActivity, "카테고리를 불러오는 데 실패했습니다.", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+
 
     private fun loadCategories() {
         RetrofitClient.ingrService.getNamesByCategory("all")
@@ -282,7 +328,11 @@ class InsertActivity : AppCompatActivity() {
                         Toast.LENGTH_LONG
                     ).show()
                     Log.d("SubmitRecipe", "Response: ${response.body()}")
+                    Handler().postDelayed({
+                        startActivity(Intent(this@InsertActivity, MainActivity::class.java))
+                    }, 2000)
                     startActivity(Intent(this@InsertActivity, MainActivity::class.java))
+
                 } else {
                     // 서버 응답이 실패한 경우
                     handleFailure()
@@ -323,27 +373,32 @@ class InsertActivity : AppCompatActivity() {
         Log.e("InsertActivity", message, throwable)
         Toast.makeText(this@InsertActivity, "Network error occurred. Please check your internet connection.", Toast.LENGTH_SHORT).show()
     }
-    private fun submitRecipe() {
+    private fun submitRecipe(categoryId: Long) {
         imageUrl?.let { uri ->
-            val title = createPartFromString(binding.etTitle.text.toString())
-            val content = createPartFromString(binding.etContent.text.toString())
+            val titlePart = createPartFromString(binding.etTitle.text.toString())
+            val contentPart = createPartFromString(binding.etContent.text.toString())
+            val categoryIdPart = createPartFromString(categoryId.toString())
             val imagePart = prepareFilePart("image", uri)
 
-            RetrofitClient.ingrService.submitRecipe(title, content, imagePart).enqueue(object : Callback<String> {
-                override fun onResponse(call: Call<String>, response: Response<String>) {
-                    if (response.isSuccessful) {
-                        // 성공 처리 로직
-                    } else {
-                        // 실패 처리 로직
+            RetrofitClient.ingrService.submitRecipe(titlePart, contentPart, categoryIdPart, imagePart)
+                .enqueue(object : Callback<String> {
+                    override fun onResponse(call: Call<String>, response: Response<String>) {
+                        if (response.isSuccessful) {
+                            // 성공 처리 로직
+                            Toast.makeText(this@InsertActivity, "Recipe submitted successfully", Toast.LENGTH_SHORT).show()
+                        } else {
+                            // 실패 처리 로직
+                            Toast.makeText(this@InsertActivity, "Failed to submit the recipe", Toast.LENGTH_SHORT).show()
+                        }
                     }
-                }
 
-                override fun onFailure(call: Call<String>, t: Throwable) {
-                    // 네트워크 오류 처리 로직
-                }
-            })
-        }
+                    override fun onFailure(call: Call<String>, t: Throwable) {
+                        Log.e("InsertActivity", "Network error: ${t.message}", t)
+                    }
+                })
+        } ?: Toast.makeText(this, "Please select an image", Toast.LENGTH_SHORT).show()
     }
+
 
     private fun createPartFromString(value: String): RequestBody {
         return value.toRequestBody("text/plain".toMediaTypeOrNull())

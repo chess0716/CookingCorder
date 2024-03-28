@@ -30,9 +30,9 @@ class BoardAdapter(private val context: Context, private var boards: List<BoardD
         fun bind(board: BoardDTO) {
             binding.tvTitle.text = board.title
 
-
+            // 이미지 URL에 타임스탬프 추가
             val imageUrl = board.imageUrl?.let {
-                "http://222.96.80.225:8005$it" // 서버 주소와 이미지 경로 수정
+                "http://59.28.155.171:8005$it?timestamp=${System.currentTimeMillis()}" // 서버 주소와 이미지 경로 수정, 타임스탬프 추가
             }
 
             if (!imageUrl.isNullOrEmpty()) {
