@@ -31,7 +31,6 @@ class DetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        ingrGetSwitch = findViewById(R.id.ingrGet)
 
         apiService = RetrofitClient.apiService
 
@@ -51,16 +50,6 @@ class DetailActivity : AppCompatActivity() {
         // 뒤로가기
         binding.btnBack.setOnClickListener { finish() }
 
-        // 스위치 상태 변경 감지
-        ingrGetSwitch.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                // 만약 스위치가 켜졌다면 텍스트를 "보유"로 변경
-                ingrGetSwitch.text = "보유"
-            } else {
-                // 스위치가 꺼졌다면 텍스트를 "미보유"로 변경
-                ingrGetSwitch.text = "미보유"
-            }
-        }
     }
 
     private fun loadData(num: Int) {
