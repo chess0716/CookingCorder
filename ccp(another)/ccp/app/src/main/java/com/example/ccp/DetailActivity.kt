@@ -132,7 +132,7 @@ class DetailActivity : AppCompatActivity() {
         })
     }
 
-    // 불러온 게시글 데이터를 모바일 화면에 입출력
+    // 불러온 게시글 데이터를 모바일 화면에 출력
     private fun updateUI(title: String?, user: User?, content: String?) {
         // 받아온 게시물 정보를 UI에 반영합니다.
         binding.detailTitle.text = Editable.Factory.getInstance().newEditable(title)
@@ -141,7 +141,7 @@ class DetailActivity : AppCompatActivity() {
         binding.detailContent.text = Editable.Factory.getInstance().newEditable(content)
     }
 
-    // 불러온 재료 리스트 데이터를 모바일 화면에 입출력
+    // 불러온 재료 리스트 데이터를 모바일 화면에 출력
     private fun displayIngredients(ingrBoards: List<IngrBoard>) {
         // 1. RecyclerView에 표시할 재료 목록 데이터(ingrBoards)를 사용하여 RecyclerView의 Adapter를 생성
         val adapter = IngrBoardAdapter(this)

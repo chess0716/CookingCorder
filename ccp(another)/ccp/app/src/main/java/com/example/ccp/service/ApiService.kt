@@ -22,6 +22,7 @@ interface ApiService {
     @GET
     fun getImage(@Url imageUrl: String): Call<ResponseBody>
 
+    // 게시글 불러오기
     @GET("/api/boards/{num}")
     fun getBoardByNum(@Path("num") num: Int): Call<BoardDTO?>
 
@@ -40,10 +41,11 @@ interface ApiService {
     @POST("/api/login")
     fun login(@Body loginRequest: LoginRequest?): Call<LoginResponse?>
 
-    // 게시물에 대한 재료 목록을 가져오는 메서드 추가
+    // 게시물 내 재료 목록을 가져오는 메서드 추가
     @GET("/api/boards/{num}/ingredients")
     fun getIngredientsForBoard(@Path("num") num: Int): Call<List<IngrBoard>>
 
+    // 게시물 내 총 가격 데이터를 가져오기
     @GET("/api/boards/{num}/totalPrice")
     fun getTotalPrice(@Path("num") num: Int): Call<Int>
 }
