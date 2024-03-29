@@ -40,8 +40,19 @@ class IngrBoardAdapter(
         fun bind(board: IngrBoard) {
             ingrNameTextView.text = board.name
             ingrUnitTextView.text = board.unit.toString()
-            // Switch 설정
-            // ingrGetSwitch.isChecked = board.isOwned
+
+            // Switch 상태에 따라 텍스트 변경
+            ingrGetSwitch.setOnCheckedChangeListener { _, isChecked ->
+                if (isChecked) {
+                    ingrGetSwitch.text = "보유"
+                } else {
+                    ingrGetSwitch.text = "미보유"
+                }
+            }
+
+            // 기본적으로 스위치가 꺼져있는 상태로 설정
+            ingrGetSwitch.isChecked = false
         }
     }
+
 }
