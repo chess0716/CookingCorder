@@ -5,12 +5,14 @@ import android.os.Bundle
 import android.text.Editable
 import android.util.Log
 import android.view.MotionEvent
+import android.widget.CompoundButton
 import android.widget.Switch
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.ccp.adapter.BoardAdapter
 import com.example.ccp.adapter.IngrBoardAdapter
 import com.example.ccp.databinding.ActivityDetailBinding
+import com.example.ccp.databinding.ItemIngredientBinding
 import com.example.ccp.model.BoardDTO
 import com.example.ccp.model.IngrBoard
 import com.example.ccp.model.User
@@ -26,13 +28,13 @@ import retrofit2.http.Path
 class DetailActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityDetailBinding
-    lateinit var adapter: BoardAdapter
+    lateinit var bindingII: ItemIngredientBinding
     private lateinit var apiService: ApiService
-    private lateinit var ingrGetSwitch: Switch
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailBinding.inflate(layoutInflater)
+        bindingII = ItemIngredientBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         apiService = RetrofitClient.apiService
@@ -54,6 +56,8 @@ class DetailActivity : AppCompatActivity() {
 
         // 뒤로가기
         binding.btnBack.setOnClickListener { finish() }
+
+        // 미보유 스위치 리스너 설정
 
     }
 
@@ -79,6 +83,14 @@ class DetailActivity : AppCompatActivity() {
             }
         })
     }
+    // 불러온 게시글 데이터를 모바일 화면에 출력
+    private fun updateUI(title: String?, user: User?, content: String?) {
+        // 받아온 게시물 정보를 UI에 반영합니다.
+        binding.detailTitle.text = Editable.Factory.getInstance().newEditable(title)
+        binding.detailWriter.text =
+            Editable.Factory.getInstance().newEditable(user?.name ?: "Unknown")
+        binding.detailContent.text = Editable.Factory.getInstance().newEditable(content)
+    }
 
     // 서버로부터 입력받은 재료 목록 불러오기
     private fun loadIngredients(num: Int) {
@@ -96,9 +108,9 @@ class DetailActivity : AppCompatActivity() {
                         val unit = ingrBoard.unit
                         // 이름과 단위에 접근하여 필요한 작업을 수행합니다. 예를 들어, 로그에 출력하거나 다른 작업을 수행할 수 있습니다.
                         Log.d("DetailActivityLists", "재료 이름: $name, 단위: $unit")
+                        // UI에 재료를 표시합니다.
+                        displayIngredients(ingrBoards)
                     }
-                    // UI에 재료를 표시합니다.
-                    displayIngredients(ingrBoards)
                 } else {
                     // 재료 목록이 비어있을 때 처리
                     Log.e("DetailActivity", "Ingredient list is empty")
@@ -109,6 +121,15 @@ class DetailActivity : AppCompatActivity() {
                 Log.e("DetailActivity", "Failed to load ingredients: ${t.message}")
             }
         })
+    }
+    // 재료 목록을 RecyclerView에 표시
+    private fun displayIngredients(ingrBoards: List<IngrBoard>) {
+        // RecyclerView에 연결할 어댑터 생성
+        val adapter = IngrBoardAdapter(this, ingrBoards)
+        // RecyclerView에 어댑터 설정
+        binding.recyclerViewIngredients.adapter = adapter
+        // RecyclerView의 LayoutManager 설정
+        binding.recyclerViewIngredients.layoutManager = LinearLayoutManager(this)
     }
 
     // 서버로부터 재료 총 가격 데이터 불러오기
@@ -130,27 +151,6 @@ class DetailActivity : AppCompatActivity() {
                 Log.e("TotalPrice", "Failed to load TotalPrice: ${t.message}")
             }
         })
-    }
-
-    // 불러온 게시글 데이터를 모바일 화면에 출력
-    private fun updateUI(title: String?, user: User?, content: String?) {
-        // 받아온 게시물 정보를 UI에 반영합니다.
-        binding.detailTitle.text = Editable.Factory.getInstance().newEditable(title)
-        binding.detailWriter.text =
-            Editable.Factory.getInstance().newEditable(user?.name ?: "Unknown")
-        binding.detailContent.text = Editable.Factory.getInstance().newEditable(content)
-    }
-
-    // 불러온 재료 리스트 데이터를 모바일 화면에 출력
-    private fun displayIngredients(ingrBoards: List<IngrBoard>) {
-        // 1. RecyclerView에 표시할 재료 목록 데이터(ingrBoards)를 사용하여 RecyclerView의 Adapter를 생성
-        val adapter = IngrBoardAdapter(this)
-
-        // 2. RecyclerView에 Adapter를 설정하고, RecyclerView에 연결
-        binding.recyclerViewIngredients.adapter = adapter
-
-        // 3. RecyclerView의 LayoutManager를 설정하여 아이템의 배치 방법을 결정
-        binding.recyclerViewIngredients.layoutManager = LinearLayoutManager(this)
     }
 
 
