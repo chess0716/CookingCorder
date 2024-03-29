@@ -144,7 +144,7 @@
                 android:orientation="vertical">
 
                 <EditText
-                    android:id="@+id/editTextTextMultiLine"
+                    android:id="@+id/inputComment"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -161,7 +161,7 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/replyList"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="wrap_content" />
             </LinearLayout>
 
             <LinearLayout

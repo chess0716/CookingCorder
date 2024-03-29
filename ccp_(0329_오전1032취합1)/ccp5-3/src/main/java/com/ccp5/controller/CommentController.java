@@ -25,6 +25,7 @@ public class CommentController {
     @Autowired
     private CommentService commentService;
 
+    // 댓글창 출력
     @GetMapping
     public ResponseEntity<List<Comment>> getAllComments() {
         List<Comment> comments = commentService.getAllComments();
@@ -35,12 +36,14 @@ public class CommentController {
         }
     }
 
+    // 댓글 작성
     @PostMapping
     public ResponseEntity<Comment> createComment(@ModelAttribute Comment comment) {
         commentService.createComment(comment);
         return ResponseEntity.status(HttpStatus.CREATED).body(comment);
     }
 
+    // 댓글 수정
     @PutMapping("/{cnum}")
     public ResponseEntity<Comment> updateComment(@PathVariable Long cnum, @RequestBody Comment updatedComment) {
         Comment comment = commentService.getComment(cnum);
@@ -52,6 +55,7 @@ public class CommentController {
         }
     }
 
+    // 댓글 삭제
     @DeleteMapping("/{cnum}")
     public ResponseEntity<Void> deleteComment(@PathVariable Long cnum) {
         Comment comment = commentService.getComment(cnum);
