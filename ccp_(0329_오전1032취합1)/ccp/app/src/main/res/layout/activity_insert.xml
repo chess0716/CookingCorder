@@ -23,9 +23,8 @@
                 android:id="@+id/recipeForm"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_margin="10dp">
-
+                android:layout_margin="10dp"
+                android:orientation="vertical">
 
 
                 <TextView
@@ -55,8 +54,8 @@
                 <Spinner
                     android:id="@+id/spinnerRecipeCategory"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"/>
+                    android:layout_height="39dp"
+                    android:layout_marginTop="8dp" />
 
                 <Button
                     android:id="@+id/btnUpload"
@@ -70,8 +69,8 @@
                 android:id="@+id/newFormsSection"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_margin="10dp">
+                android:layout_margin="10dp"
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -88,34 +87,44 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
+
                         <Spinner
                             android:id="@+id/spinnerCategory"
-                            android:layout_width="151dp"
-                            android:layout_height="34dp"
-                            android:layout_weight="1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5"
                             android:prompt="@string/category_prompt" />
 
                         <Spinner
                             android:id="@+id/spinnerName"
-                            android:layout_width="0dp"
+                            android:layout_width="129dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
+                            android:layout_weight="0.5"
                             android:prompt="@string/ingredient_prompt" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.5"
+                        android:orientation="horizontal">
 
                         <EditText
                             android:id="@+id/etUnit"
-                            android:layout_width="0dp"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
+                            android:layout_weight="2"
                             android:hint="수량(개/g)"
                             android:inputType="number" />
+
+                        <Button
+                            android:id="@+id/btnAddForm"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="추가" />
                     </LinearLayout>
 
-                    <Button
-                        android:id="@+id/btnAddForm"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="+" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -123,8 +132,8 @@
                 android:id="@+id/btnSubmitAll"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="모든 폼 제출"
-                android:layout_gravity="center" />
+                android:layout_gravity="center"
+                android:text="모든 폼 제출" />
 
         </LinearLayout>
     </ScrollView>
