@@ -37,9 +37,12 @@ public class CommentController {
     }
 
     // 댓글 작성
-    @PostMapping
-    public ResponseEntity<CommentDTO> createComment(@ModelAttribute CommentDTO comment) {
+    @PostMapping("/{boardNum}")
+    public ResponseEntity<CommentDTO> createComment(@ModelAttribute CommentDTO comment) {	
     	commentService.createComment(comment);
+//    	System.out.println(comment.getBoard().getNum());
+//    	System.out.println(comment.getWriter());
+//    	System.out.println(comment.getContent());
         return ResponseEntity.status(HttpStatus.CREATED).body(comment);
     }
 

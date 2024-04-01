@@ -187,13 +187,15 @@ body {
 			$('#commentForm').on('submit', function(e) {
 				e.preventDefault(); // 폼 기본 제출 막기
 				var formData = new FormData(this);
+				var boardNum = $(this).data("board-num");
 				$.ajax({
 					type : 'POST',
-					url : '/comments',
+					url : '/comments/'+boardNum,
 					data : formData,
 					processData : false,
 					contentType : false,
 					success : function(response) {
+						console.log(boardNum);
 						console.log("댓글이 성공적으로 작성되었습니다.");
 						loadComments(); // 댓글 목록을 다시 불러와서 업데이트
 					},

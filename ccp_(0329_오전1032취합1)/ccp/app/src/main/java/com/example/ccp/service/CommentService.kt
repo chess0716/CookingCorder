@@ -17,7 +17,7 @@ interface CommentService {
     fun getAllComments() : Call<List<CommentDTO>>
 
     // 댓글 작성
-    @POST("/comments")
+    @POST("/comments/{boardNum}")
     fun addComments(@Body commentDTO: CommentDTO): Call<Void>
 
     // 댓글 수정
