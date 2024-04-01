@@ -232,7 +232,7 @@ body {
 
 			$.ajax({
 				type : "GET",
-				url : "/comments/{num}", // 댓글 목록을 가져오는 엔드포인트 URL
+				url : "/comments", // 댓글 목록을 가져오는 엔드포인트 URL
 				success : function(comments) {
 					console.log("서버에서 받아온 댓글 목록:", comments);
 					// 받아온 댓글 목록을 화면에 표시하기

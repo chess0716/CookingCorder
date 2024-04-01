@@ -27,10 +27,9 @@ public class CommentController {
     private CommentService commentService;
 
     // 댓글창 출력
-    @GetMapping("/{num}")
-    public ResponseEntity<List<CommentDTO>> getAllComments(@PathVariable("num") Long boardNum) {
-        List<CommentDTO> comments = commentService.getAllComments(boardNum);
-        System.out.println("boardNum(commentList) : "+boardNum);
+    @GetMapping
+    public ResponseEntity<List<CommentDTO>> getAllComments() {
+        List<CommentDTO> comments = commentService.getAllComments();
         if (!comments.isEmpty()) {
             return ResponseEntity.ok(comments);
         } else {
@@ -43,7 +42,6 @@ public class CommentController {
     public ResponseEntity<CommentDTO> createComment(@RequestBody CommentDTO comment, BoardDTO board) {
         commentService.createComment(comment);
         System.out.println("boardNum(addComment) : "+board.getNum());
-        comment.setBoard(board);
         return ResponseEntity.status(HttpStatus.CREATED).body(comment);
     }
     
