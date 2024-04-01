@@ -39,9 +39,8 @@ public class CommentController {
 
     // 댓글 작성
     @PostMapping("/{boardNum}")
-    public ResponseEntity<CommentDTO> createComment(@RequestBody CommentDTO comment, BoardDTO board) {
+    public ResponseEntity<CommentDTO> createComment(@RequestBody CommentDTO comment) {
         commentService.createComment(comment);
-        System.out.println("boardNum(addComment) : "+board.getNum());
         return ResponseEntity.status(HttpStatus.CREATED).body(comment);
     }
     

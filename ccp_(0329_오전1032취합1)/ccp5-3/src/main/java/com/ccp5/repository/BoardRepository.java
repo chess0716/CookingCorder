@@ -22,4 +22,6 @@ public interface BoardRepository extends JpaRepository<BoardDTO, Integer> {
     List<BoardDTO> findByTitleContaining(String title);
     
     List<BoardDTO> findByCategoryId(Long categoryId);
+
+	BoardDTO findByNum(int i);
 }
