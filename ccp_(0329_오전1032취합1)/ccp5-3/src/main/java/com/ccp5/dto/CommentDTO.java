@@ -15,7 +15,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 @Entity (name="tbl_comment4")
-public class Comment {
+public class CommentDTO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

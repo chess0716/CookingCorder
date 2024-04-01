@@ -7,7 +7,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import com.ccp5.dto.Comment;
+import com.ccp5.dto.CommentDTO;
 import com.ccp5.dto.User;
 import com.ccp5.repository.CommentRepository;
 import com.ccp5.repository.UserRepository;
@@ -22,12 +22,12 @@ public class CommentService {
 	@Autowired
     private  UserRepository userRepository;
     // 모든 댓글 조회
-    public List<Comment> getAllComments() {
+    public List<CommentDTO> getAllComments() {
         return commentRepository.findAll();
     }
 
     // 댓글 작성
-    public void createComment(Comment comment) {
+    public void createComment(CommentDTO comment) {
     	//컨텍스트 홀더로 인증객체 얻어서 사용자 정보 추출 후 연결 
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = "";
@@ -45,13 +45,13 @@ public class CommentService {
 
 
     // 댓글 조회
-    public Comment getComment(Long cnum) {
+    public CommentDTO getComment(Long cnum) {
         return commentRepository.findById(cnum).orElse(null);
     }
 
     // 댓글 수정
-    public void updateComment(Long cnum, Comment updatedComment) {
-        Comment comment = commentRepository.findById(cnum).orElse(null);
+    public void updateComment(Long cnum, CommentDTO updatedComment) {
+        CommentDTO comment = commentRepository.findById(cnum).orElse(null);
         if (comment != null) {
             // 수정할 내용 업데이트
             comment.setContent(updatedComment.getContent());
