@@ -73,7 +73,7 @@ class DetailActivity : AppCompatActivity() {
             val commentContent = inputComment.text.toString().trim()
             if (commentContent.isNotEmpty()) {
                 // 댓글 내용이 비어 있지 않은 경우에만 서버로 전송
-                addCommentToServer(commentContent)
+                addCommentToServer(commentContent, num)
             }
         }
 
@@ -88,6 +88,7 @@ class DetailActivity : AppCompatActivity() {
                     val title = board.title
                     val user = board.writer
                     val content = board.content
+                    Log.d("AndroidBoardNum","${board.num}")
 
                     // UI 업데이트
                     updateUI(title, user, content)
@@ -173,7 +174,7 @@ class DetailActivity : AppCompatActivity() {
             }
         })
     }
-
+    // 재료 총 가격 출력
     private fun displayTotalPrice(totalPrice: Int?) {
         if (totalPrice != null) {
             val totalPriceText = totalPrice.toString() // Int를 String으로 변환
@@ -185,33 +186,48 @@ class DetailActivity : AppCompatActivity() {
     }
 
     // 서버로 댓글 추가 요청을 보내는 함수
-    private fun addCommentToServer(commentContent: String) {
-        // 댓글 작성 시 필요한 데이터 생성 (예: 작성자 이름, 내용)
-        val commentDTO = CommentDTO(
-            writerUsername = "사용자명", // 실제 사용자명으로 대체해야 함
-            content = commentContent
-        )
+    private fun addCommentToServer(commentContent: String, boardNum: Int) {
+        // 게시글 번호를 사용하여 게시글 정보를 가져오기
+        val board = apiService.getBoardByNum(boardNum)
+        board?.enqueue(object : Callback<BoardDTO?> {
+            override fun onResponse(call: Call<BoardDTO?>, response: Response<BoardDTO?>) {
+                val boardData = response.body()
+                if (boardData != null) {
+                    // 댓글 작성 시 필요한 데이터 생성 (예: 작성자 이름, 내용)
+                    val commentDTO = CommentDTO(
+                        writerUsername = "사용자명", // 실제 사용자명으로 대체해야 함
+                        content = commentContent,
+                        boardBnum = boardData.num
+                    )
+                    // 서버로 댓글 추가 요청 보내기
+                    commentService.addComments(commentDTO).enqueue(object : Callback<Void> {
+                        override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                            if (response.isSuccessful) {
+                                // 성공적으로 댓글이 서버에 추가된 경우
+                                // 필요한 작업 수행 (예: 성공 메시지 표시, 화면 갱신 등)
+                                Log.d("comment", commentDTO.toString())
+                                Log.d("DetailActivity", "댓글이 성공적으로 추가되었습니다.")
+                                // 예시: 댓글 추가 후 화면을 갱신하거나 다른 작업 수행
+                            } else {
+                                // 서버로부터 실패 응답을 받은 경우
+                                // 오류 처리 (예: 실패 메시지 표시)
+                                Log.e("DetailActivity", "댓글 추가 실패: ${response.message()}")
+                            }
+                        }
 
-        // 서버로 댓글 추가 요청 보내기
-        commentService.addComments(commentDTO).enqueue(object : Callback<Void> {
-            override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                if (response.isSuccessful) {
-                    // 성공적으로 댓글이 서버에 추가된 경우
-                    // 필요한 작업 수행 (예: 성공 메시지 표시, 화면 갱신 등)
-                    Log.d("comment", commentDTO.toString())
-                    Log.d("DetailActivity", "댓글이 성공적으로 추가되었습니다.")
-                    // 예시: 댓글 추가 후 화면을 갱신하거나 다른 작업 수행
+                        override fun onFailure(call: Call<Void>, t: Throwable) {
+                            // 통신 실패 시의 처리
+                            // 오류 처리 (예: 네트워크 오류 메시지 표시)
+                            Log.e("DetailActivity", "댓글 추가 실패: ${t.message}")
+                        }
+                    })
                 } else {
-                    // 서버로부터 실패 응답을 받은 경우
-                    // 오류 처리 (예: 실패 메시지 표시)
-                    Log.e("DetailActivity", "댓글 추가 실패: ${response.message()}")
+                    Log.e("DetailActivity", "Failed to load board data")
                 }
             }
 
-            override fun onFailure(call: Call<Void>, t: Throwable) {
-                // 통신 실패 시의 처리
-                // 오류 처리 (예: 네트워크 오류 메시지 표시)
-                Log.e("DetailActivity", "댓글 추가 실패: ${t.message}")
+            override fun onFailure(call: Call<BoardDTO?>, t: Throwable) {
+                Log.e("DetailActivity", "Failed to load board data: ${t.message}")
             }
         })
     }
@@ -242,7 +258,7 @@ class DetailActivity : AppCompatActivity() {
             }
         })
     }
-
+    // 댓글창 불러오기
     private fun displayComments(comment: List<CommentDTO>) {
         // RecyclerView에 연결할 어댑터 생성
         val adapter = CommentAdapter(this, comment)

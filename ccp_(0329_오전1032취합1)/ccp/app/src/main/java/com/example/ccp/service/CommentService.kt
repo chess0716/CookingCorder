@@ -13,7 +13,7 @@ import retrofit2.http.Path
 
 interface CommentService {
     // 댓글창 출력
-    @GET("/comments")
+    @GET("/comments/{num}")
     fun getAllComments() : Call<List<CommentDTO>>
 
     // 댓글 작성

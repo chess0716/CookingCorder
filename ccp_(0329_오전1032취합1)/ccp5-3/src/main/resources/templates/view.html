@@ -164,13 +164,17 @@ body {
 			<!-- 사용자명을 자동으로 불러와서 폼에 추가 -->
 			<label for="username">사용자명:</label><br> <input type="text"
 				id="username" name="username" readonly="readonly"
-				th:value="${#authentication.principal.username}" /><br> <br>
+				th:value="${#authentication.principal.username}" /><br> <input
+				type="hidden" id="boardNum" name="boardNum" th:value="${board.num}" />
+			<!-- 게시글 번호 추가 -->
+			<br>
 			<!-- 댓글 내용 입력 -->
 			<label for="content">내용:</label><br>
 			<textarea id="content" name="content" rows="4" cols="50"></textarea>
 			<br> <br>
 			<!-- 댓글 작성 버튼 -->
-			<button type="submit">댓글 작성</button>
+			<button type="submit" th:attr="data-board-num=${board.num}">댓글
+				작성</button>
 		</form>
 
 	</div>
@@ -186,16 +190,30 @@ body {
 			// 댓글 폼 제출 이벤트 처리
 			$('#commentForm').on('submit', function(e) {
 				e.preventDefault(); // 폼 기본 제출 막기
-				var formData = new FormData(this);
-				var boardNum = $(this).data("board-num");
+
+				// 폼 데이터를 JSON 형식으로 직렬화
+				var formData = {
+					writer : $('#writer').val(),
+					content : $('#content').val(),
+					regdate : new Date().toISOString(),
+					boardNum : $('#boardNum').val()
+				// 게시글 번호 가져오기
+				};
+
+				// 댓글 데이터를 JSON 문자열로 변환
+				var jsonData = JSON.stringify(formData);
+
+				// boardNum 값 확인
+				console.log(formData.boardNum);
+
+				// AJAX를 이용해 서버로 데이터 전송
 				$.ajax({
 					type : 'POST',
-					url : '/comments/'+boardNum,
-					data : formData,
+					url : '/comments/' + formData.boardNum,
+					data : jsonData,
 					processData : false,
-					contentType : false,
+					contentType : 'application/json;charset=utf-8',
 					success : function(response) {
-						console.log(boardNum);
 						console.log("댓글이 성공적으로 작성되었습니다.");
 						loadComments(); // 댓글 목록을 다시 불러와서 업데이트
 					},
@@ -214,7 +232,7 @@ body {
 
 			$.ajax({
 				type : "GET",
-				url : "/comments", // 댓글 목록을 가져오는 엔드포인트 URL
+				url : "/comments/{num}", // 댓글 목록을 가져오는 엔드포인트 URL
 				success : function(comments) {
 					console.log("서버에서 받아온 댓글 목록:", comments);
 					// 받아온 댓글 목록을 화면에 표시하기

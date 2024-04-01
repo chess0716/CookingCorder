@@ -22,8 +22,8 @@ public class CommentService {
 	@Autowired
     private  UserRepository userRepository;
     // 모든 댓글 조회
-    public List<CommentDTO> getAllComments() {
-        return commentRepository.findAll();
+	public List<CommentDTO> getAllComments(Long boardNum) {
+        return commentRepository.findByBoardNum(boardNum);
     }
 
     // 댓글 작성
