@@ -12,18 +12,18 @@ import retrofit2.http.Query
 
 interface CommentService {
     // 댓글창 출력
-    @GET("/comments")
+    @GET("/api/comments")
     fun getAllComments() : Call<List<CommentDTO>>
 
     // 댓글 작성
-    @POST("/comments")
+    @POST("/api/comments")
     fun addComments(@Body commentDTO: CommentDTO, @Query("boardNum") boardNum: Int): Call<Void>
 
     // 댓글 수정
-    @PUT("/comments/{cnum}")
+    @PUT("/api/comments/{cnum}")
     fun updateComments(@Path("cnum") cnum: Int, @Body requestBody: CommentDTO): Call<CommentDTO>
 
     // 댓글 삭제
-    @DELETE("/comments/{cnum}")
+    @DELETE("/api/comments/{cnum}")
     fun deleteComments(@Path("cnum") cnum: Int): Call<Void>
 }
