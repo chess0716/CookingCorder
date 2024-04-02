@@ -32,8 +32,8 @@ public class CommentController {
 
 	// 댓글창 출력
 	@GetMapping
-	public ResponseEntity<List<CommentDTO>> getAllComments() {
-		List<CommentDTO> comments = commentService.getAllComments();
+	public ResponseEntity<List<CommentDTO>> getAllComments(@RequestParam("boardNum") int boardNum) {
+		List<CommentDTO> comments = commentService.findCommentsByBnum(boardNum);
 		if (!comments.isEmpty()) {
 			return ResponseEntity.ok(comments);
 		} else {
