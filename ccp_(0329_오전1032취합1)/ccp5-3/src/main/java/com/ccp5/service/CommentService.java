@@ -30,6 +30,11 @@ public class CommentService {
 	public List<CommentDTO> getAllComments() {
 		return commentRepository.findAll();
 	}
+	
+	// 특정 게시글 댓글 조회
+	public List<CommentDTO> findCommentsByBnum(int bnum){
+		return commentRepository.findByBoardNum(bnum);
+	}
 
 	// 댓글 작성
 	public void createComment(CommentDTO comment) {

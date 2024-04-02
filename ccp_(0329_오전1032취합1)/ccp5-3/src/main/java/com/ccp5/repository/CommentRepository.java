@@ -14,5 +14,5 @@ public interface CommentRepository extends JpaRepository<CommentDTO, Long> {
 	List<CommentDTO> findByBoard(BoardDTO board);
 	
 	 // 특정 게시글에 대한 모든 댓글을 가져오는 메서드
-    List<CommentDTO> findByBoardNum(Long boardNum);
+    List<CommentDTO> findByBoardNum(int bnum);
 }

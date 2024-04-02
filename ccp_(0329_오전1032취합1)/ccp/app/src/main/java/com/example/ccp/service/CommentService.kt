@@ -13,7 +13,7 @@ import retrofit2.http.Query
 interface CommentService {
     // 댓글창 출력
     @GET("/api/comments")
-    fun getAllComments() : Call<List<CommentDTO>>
+    fun getAllComments(@Query("boardNum") boardNum: Int) : Call<List<CommentDTO>>
 
     // 댓글 작성
     @POST("/api/comments")
