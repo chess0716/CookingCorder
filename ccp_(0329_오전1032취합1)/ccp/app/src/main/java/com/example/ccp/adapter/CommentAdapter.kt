@@ -1,6 +1,7 @@
 package com.example.ccp.adapter
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,11 +32,17 @@ class CommentAdapter(
         private val commentWriterTextView : TextView = commentView.findViewById(R.id.commentWriter)
         private val commentContentTextView : TextView = commentView.findViewById(R.id.commentContent)
         private val commentTimeTextView : TextView = commentView.findViewById(R.id.commentTime)
+        private val linkDeleteComment: TextView = itemView.findViewById(R.id.linkDeleteComment)
 
         fun bind(comment : CommentDTO){
             commentWriterTextView.text = comment.writerUsername
             commentContentTextView.text = comment.content
             commentTimeTextView.text = comment.regdate.toString()
+
+            // 댓글 삭제 버튼 클릭 이벤트 처리
+            linkDeleteComment.setOnClickListener{
+                Log.d("deleteComment","댓글 삭제 버튼")
+            }
         }
     }
 

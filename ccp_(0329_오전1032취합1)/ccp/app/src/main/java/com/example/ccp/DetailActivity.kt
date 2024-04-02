@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.MotionEvent
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.ccp.adapter.CommentAdapter
@@ -59,9 +60,10 @@ class DetailActivity : AppCompatActivity() {
         // 뒤로가기
         binding.btnBack.setOnClickListener { finish() }
 
-        // 댓글 작성 버튼 클릭 이벤트 처리
+        // 댓글 관련 변수
         val addCommentButton: Button = findViewById(R.id.addComment)
         val inputComment: EditText = findViewById(R.id.inputComment)
+        // 댓글 작성 버튼 클릭 이벤트 처리
         addCommentButton.setOnClickListener {
             val commentContent = inputComment.text.toString().trim()
             if (commentContent.isNotEmpty()) {
@@ -188,7 +190,7 @@ class DetailActivity : AppCompatActivity() {
                 if (boardData != null) {
                     // 댓글 작성 시 필요한 데이터 생성 (예: 작성자 이름, 내용)
                     val commentDTO = CommentDTO(
-                        writerUsername = "사용자명", // 실제 사용자명으로 대체해야 함
+                        writerUsername = "댓글 작성자", // 실제 사용자명으로 대체해야 함
                         content = commentContent,
                         boardBnum = boardData.num
                     )
