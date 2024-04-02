@@ -207,6 +207,7 @@ class DetailActivity : AppCompatActivity() {
                                 // 필요한 작업 수행 (예: 성공 메시지 표시, 화면 갱신 등)
                                 Log.d("comment", commentDTO.toString())
                                 Log.d("DetailActivity", "댓글이 성공적으로 추가되었습니다.")
+                                loadComments()
                                 // 예시: 댓글 추가 후 화면을 갱신하거나 다른 작업 수행
                             } else {
                                 // 서버로부터 실패 응답을 받은 경우
