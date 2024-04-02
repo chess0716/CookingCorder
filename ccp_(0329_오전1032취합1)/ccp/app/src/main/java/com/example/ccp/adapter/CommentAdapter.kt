@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ccp.R
 import com.example.ccp.model.CommentDTO
@@ -34,21 +35,66 @@ class CommentAdapter(
         return commentList.size // 변수명 변경
     }
 
-    inner class ViewHolder(commentView: View) : RecyclerView.ViewHolder(commentView){
-        private val commentWriterTextView : TextView = commentView.findViewById(R.id.commentWriter)
-        private val commentContentTextView : TextView = commentView.findViewById(R.id.commentContent)
-        private val commentTimeTextView : TextView = commentView.findViewById(R.id.commentTime)
+    inner class ViewHolder(commentView: View) : RecyclerView.ViewHolder(commentView) {
+        private val commentWriterTextView: TextView = commentView.findViewById(R.id.commentWriter)
+        private val commentContentTextView: TextView = commentView.findViewById(R.id.commentContent)
+        private val commentTimeTextView: TextView = commentView.findViewById(R.id.commentTime)
         private val linkDeleteComment: TextView = itemView.findViewById(R.id.linkDeleteComment)
+        private val linkUpdateComment: TextView = itemView.findViewById(R.id.linkUpdateComment)
+        private val linkCancelEdit: TextView = commentView.findViewById(R.id.linkCancelEdit)
+        private val textView: TextView = commentView.findViewById(R.id.commentContent)
+        private val editText: TextView = commentView.findViewById(R.id.editComment)
 
-        fun bind(comment : CommentDTO){
+        fun bind(comment: CommentDTO) {
             commentWriterTextView.text = comment.writerUsername
             commentContentTextView.text = comment.content
             commentTimeTextView.text = comment.regdate.toString()
 
             // 댓글 삭제 버튼 클릭 이벤트 처리
-            linkDeleteComment.setOnClickListener{
-                Log.d("deleteComment","댓글 삭제 버튼")
-                deleteCommentToServer(comment.cnum)
+            linkDeleteComment.setOnClickListener {
+                Log.d("deleteComment", "댓글 삭제 버튼")
+                // 경고창 띄우기
+                val alertDialogBuilder = AlertDialog.Builder(context)
+                alertDialogBuilder.setMessage("댓글을 삭제하시겠습니까?")
+                alertDialogBuilder.setPositiveButton("삭제") { _, _ ->
+                    // 확인 버튼을 누르면 삭제 함수 호출
+                    deleteCommentToServer(comment.cnum)
+                }
+                alertDialogBuilder.setNegativeButton("취소") { dialog, _ ->
+                    // 취소 버튼을 누르면 아무런 동작도 하지 않음
+                    dialog.dismiss()
+                }
+                val alertDialog = alertDialogBuilder.create()
+                alertDialog.show()
+            }
+
+            // 댓글 수정 버튼 클릭 이벤트 처리
+            linkUpdateComment.setOnClickListener {
+                Log.d("updateComment", "댓글 수정 버튼")
+                // 수정 버튼 누르기
+                if (textView.visibility == View.VISIBLE) {
+                    textView.visibility = View.GONE
+                    linkCancelEdit.visibility = View.VISIBLE
+                    editText.visibility = View.VISIBLE
+                    linkDeleteComment.visibility = View.GONE
+                }
+                // 수정 버튼 한번 더 누르기
+                else {
+                    textView.visibility = View.VISIBLE
+                    editText.visibility = View.GONE
+                    linkDeleteComment.visibility = View.VISIBLE
+                    linkCancelEdit.visibility = View.GONE
+                    editText.text = null
+                    updateCommentToServer(comment.cnum)
+                }
+            }
+            // 댓글 수정 취소 버튼을 누름
+            linkCancelEdit.setOnClickListener {
+                textView.visibility = View.VISIBLE
+                editText.visibility = View.GONE
+                linkDeleteComment.visibility = View.VISIBLE
+                linkCancelEdit.visibility = View.GONE
+                editText.text = null
             }
         }
     }
@@ -59,7 +105,8 @@ class CommentAdapter(
         notifyDataSetChanged()
     }
 
-    private fun deleteCommentToServer(cnum : Long?){
+    // 댓글 삭제 함수
+    private fun deleteCommentToServer(cnum: Long?) {
         cnum?.let { cnumNotNull ->
             commentService.deleteComments(cnumNotNull.toInt()).enqueue(object : Callback<Void> {
                 override fun onResponse(call: Call<Void>, response: Response<Void>) {
@@ -80,5 +127,9 @@ class CommentAdapter(
                 }
             })
         }
+    }
+
+    // 댓글 수정 함수
+    private fun updateCommentToServer(cnum: Long?) {
     }
 }

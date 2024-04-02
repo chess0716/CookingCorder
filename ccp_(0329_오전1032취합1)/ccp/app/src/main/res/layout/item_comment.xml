@@ -41,6 +41,17 @@
                 android:layout_weight="6"
                 android:textSize="18sp" />
 
+            <EditText
+                android:id="@+id/editComment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="6"
+                android:hint="댓글 수정"
+                android:inputType="text"
+                android:textSize="18sp"
+                android:visibility="gone" /> <!-- 초기에는 숨김 -->
+
+
             <TextView
                 android:id="@+id/linkUpdateComment"
                 android:layout_width="0dp"
@@ -56,6 +67,16 @@
                 android:layout_weight="1"
                 android:text="삭제"
                 android:textAlignment="center" />
+
+            <TextView
+                android:id="@+id/linkCancelEdit"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="취소"
+                android:textAlignment="center"
+                android:visibility="gone"/>
+
 
         </LinearLayout>
 
