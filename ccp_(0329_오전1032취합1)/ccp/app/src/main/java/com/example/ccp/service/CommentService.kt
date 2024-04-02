@@ -1,8 +1,6 @@
 package com.example.ccp.service
 
-import android.graphics.ColorSpace.Model
 import com.example.ccp.model.CommentDTO
-import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -10,6 +8,7 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface CommentService {
     // 댓글창 출력
@@ -18,7 +17,7 @@ interface CommentService {
 
     // 댓글 작성
     @POST("/comments")
-    fun addComments(@Body commentDTO: CommentDTO): Call<Void>
+    fun addComments(@Body commentDTO: CommentDTO, @Query("boardNum") boardNum: Int): Call<Void>
 
     // 댓글 수정
     @PUT("/comments/{cnum}")

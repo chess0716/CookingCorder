@@ -1,22 +1,17 @@
 package com.example.ccp
 
 import android.content.Intent
-import android.graphics.ColorSpace.Model
 import android.os.Bundle
 import android.text.Editable
 import android.util.Log
 import android.view.MotionEvent
 import android.widget.Button
-import android.widget.CompoundButton
 import android.widget.EditText
-import android.widget.Switch
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.ccp.adapter.BoardAdapter
 import com.example.ccp.adapter.CommentAdapter
 import com.example.ccp.adapter.IngrBoardAdapter
 import com.example.ccp.databinding.ActivityDetailBinding
-import com.example.ccp.databinding.ItemIngredientBinding
 
 import com.example.ccp.model.BoardDTO
 import com.example.ccp.model.CommentDTO
@@ -29,8 +24,6 @@ import com.example.ccp.util.RetrofitClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.http.Path
-import java.time.LocalDateTime
 
 
 class DetailActivity : AppCompatActivity() {
@@ -200,7 +193,7 @@ class DetailActivity : AppCompatActivity() {
                         boardBnum = boardData.num
                     )
                     // 서버로 댓글 추가 요청 보내기
-                    commentService.addComments(commentDTO).enqueue(object : Callback<Void> {
+                    commentService.addComments(commentDTO, boardNum).enqueue(object : Callback<Void> {
                         override fun onResponse(call: Call<Void>, response: Response<Void>) {
                             if (response.isSuccessful) {
                                 // 성공적으로 댓글이 서버에 추가된 경우
