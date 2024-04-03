@@ -26,11 +26,11 @@ public interface BoardRepository extends JpaRepository<Board, Integer> {
 	Integer subtractPriceByIngredientName(@Param("num") int num, @Param("ingredientName") String ingredientName);
 
 
-
-
     List<Board> findByTitleContaining(String title);
     
     List<Board> findByCategoryId(Long categoryId);
     
     List<Board> findByWriter(User writer);
+    
+    Board findByNum(int boardNum);
 }

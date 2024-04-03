@@ -50,6 +50,8 @@ object RetrofitClient {
     val myPageService: MyPageService by lazy {
         retrofit.create(MyPageService::class.java)
     }
-
+    val commentService : CommentService by lazy{
+        retrofit.create(CommentService::class.java)
+    }
 }
 
