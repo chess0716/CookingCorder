@@ -22,7 +22,7 @@ public class CommentDTO {
     private Long cnum;
     
     @ManyToOne
-    @JoinColumn(name="username")
+    @JoinColumn(name="userId")
     private User writer;
     
     private String content;
