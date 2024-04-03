@@ -62,6 +62,17 @@ class DetailActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        // 게시글 삭제
+        binding.btnDeleteDatail.setOnClickListener {
+            val intent = Intent(this@DetailActivity, MainActivity::class.java)
+            // 댓글 삭제 함수 실행
+            if (num != -1) {
+                deleteDetail(num)
+            }
+            // 댓글 삭제 후 메인 액티비티로 이동
+            startActivity(intent)
+        }
+
         // 뒤로가기
         binding.btnBack.setOnClickListener { finish() }
 
@@ -115,8 +126,26 @@ class DetailActivity : AppCompatActivity() {
         binding.detailContent.text = Editable.Factory.getInstance().newEditable(content)
     }
 
+    // 작성글을 삭제
+    private fun deleteDetail(num: Int) {
+        val board: Call<BoardDTO> = apiService.getBoardByNum(num)
+        board?.enqueue(object : Callback<BoardDTO> {
+            override fun onResponse(call: Call<BoardDTO>, response: Response<BoardDTO>) {
+                val boardData: BoardDTO? = response.body()
+                Log.d("게시글 삭제 과정", "$boardData")
+                if (boardData != null){
+//                    apiService.
+                }
+            }
+
+            override fun onFailure(call: Call<BoardDTO>, t: Throwable) {
+                TODO("Not yet implemented")
+            }
+        })
+    }
+
     // 서버로 댓글 추가 요청을 보내는 함수
-    private fun addCommentToServer(commentContent: String, boardNum: Int, username:String) {
+    private fun addCommentToServer(commentContent: String, boardNum: Int, username: String) {
         // 게시글 번호를 사용하여 게시글 정보를 가져오기
         val board = apiService.getBoardByNum(boardNum)
         board?.enqueue(object : Callback<BoardDTO?> {
@@ -129,7 +158,7 @@ class DetailActivity : AppCompatActivity() {
                         content = commentContent,
                         boardBnum = boardData.num
                     )
-                    Log.d("commnetDTO출력","$commentDTO")
+                    Log.d("commnetDTO출력", "$commentDTO")
                     // 서버로 댓글 추가 요청 보내기
                     commentService.addComments(commentDTO, boardNum, username)
                         .enqueue(object : Callback<Void> {
@@ -182,7 +211,7 @@ class DetailActivity : AppCompatActivity() {
                         displayComments(comments)
                     }
                 } else {
-                    Log.e("CommentList", "Failed to load comments")
+                    Log.e("CommentList", "작성된 댓글이 없거나 댓글을 불러오지 못했습니다.")
                 }
             }
 
