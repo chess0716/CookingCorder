@@ -175,7 +175,7 @@ class DetailActivity : AppCompatActivity() {
                 val comments = response.body()
                 if (comments != null) {
                     for (comment in comments) {
-                        val writer = comment.writerUsername
+                        val writer = comment.writerUsername ?: "Unknown"
                         val time = comment.regdate.toString() // LocalDateTime을 String으로 변환
                         val content = comment.content
                         Log.d("comments", "$writer//$content//$time")

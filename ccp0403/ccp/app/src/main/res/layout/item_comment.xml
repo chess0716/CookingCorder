@@ -43,11 +43,11 @@
 
             <EditText
                 android:id="@+id/editComment"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="6"
                 android:hint="댓글 수정"
-                android:inputType="text"
+                android:inputType="textMultiLine"
                 android:textSize="18sp"
                 android:visibility="gone" /> <!-- 초기에는 숨김 -->
 
@@ -75,7 +75,7 @@
                 android:layout_weight="1"
                 android:text="취소"
                 android:textAlignment="center"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
 
         </LinearLayout>

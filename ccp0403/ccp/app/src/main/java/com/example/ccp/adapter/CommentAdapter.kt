@@ -175,7 +175,7 @@ class CommentAdapter(
                     })
                 }
             } else {
-                Toast.makeText(context, "댓글 내용을 입력해주세요.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "댓글 내용 수정이 취소되었습니다.", Toast.LENGTH_SHORT).show()
             }
         }
     }
