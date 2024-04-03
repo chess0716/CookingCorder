@@ -2,11 +2,13 @@ package com.example.ccp
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.ccp.databinding.ActivityLoginBinding
 import com.example.ccp.model.LoginRequest
 import com.example.ccp.model.LoginResponse
+import com.example.ccp.model.User
 import com.example.ccp.service.UserService
 import com.example.ccp.util.RetrofitClient
 import retrofit2.Call
@@ -17,6 +19,7 @@ class LoginActivity : AppCompatActivity() {
 
     private lateinit var userService: UserService
     private lateinit var binding: ActivityLoginBinding
+    private lateinit var user:User
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,6 +44,8 @@ class LoginActivity : AppCompatActivity() {
 
             val loginRequest = LoginRequest(username, password)
             loginUser(loginRequest)
+            Log.d("로그인","${username}, ${password}")
+
         }
     }
 

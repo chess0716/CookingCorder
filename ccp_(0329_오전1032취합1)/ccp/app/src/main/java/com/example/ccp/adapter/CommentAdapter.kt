@@ -139,50 +139,7 @@ class CommentAdapter(
 
         // 댓글 수정 함수
         private fun updateCommentToServer(cnum: Long?) {
-            cnum?.let { cnumNotNull ->
-                // 수정할 댓글 내용을 EditText에서 가져옴
-                val updatedContent = editText.text.toString()
-                Log.d("수정을 위해 가져온 댓글 내용","${updatedContent}")
-
-                // 댓글 DTO 생성
-                val updatedComment = CommentDTO(
-                    cnum = cnumNotNull,
-                    content = updatedContent
-                )
-
-                // 서버에 수정 요청 보내기
-                commentService.updateComments(cnumNotNull.toInt(), updatedComment)
-                    .enqueue(object : Callback<CommentDTO> {
-                        override fun onResponse(
-                            call: Call<CommentDTO>,
-                            response: Response<CommentDTO>
-                        ) {
-                            if (response.isSuccessful) {
-                                // 성공적으로 수정되었을 때
-                                val updatedComment = response.body()
-                                // 로컬 데이터 갱신
-                                val newList = commentList.toMutableList()
-                                val index = newList.indexOfFirst { it.cnum == cnumNotNull }
-                                if (index != -1) {
-                                    Log.d("수정된 댓글 내용 확인","${updatedComment?.content}")
-                                    newList[index] = updatedComment!!
-                                    updateData(newList)
-                                    Toast.makeText(context, "댓글이 수정되었습니다.", Toast.LENGTH_SHORT).show()
-                                }
-                            } else {
-                                // 수정 실패
-                                Toast.makeText(context, "댓글 수정에 실패했습니다.", Toast.LENGTH_SHORT).show()
-                            }
-                        }
-
-                        override fun onFailure(call: Call<CommentDTO>, t: Throwable) {
-                            // 통신 실패
-                            Log.e("CommentAdapter", "댓글 수정 실패", t)
-                            Toast.makeText(context, "네트워크 오류로 댓글 수정에 실패했습니다.", Toast.LENGTH_SHORT)
-                                .show()
-                        }
-                    })
-            }
+            Log.d("댓글 수정","댓글 수정 함수 실행")
         }
     }
 

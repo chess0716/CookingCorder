@@ -86,6 +86,7 @@ body {
 
 		<!-- Main -->
 		<div id="main">
+			<input type="text" th:value="${board.num}" />
 			<div class="content mt-3">
 				<form action="/submit_recipe" method="post" class="recipe-form">
 					<div class="mb-3 mt-3">
@@ -127,7 +128,7 @@ body {
 									<td th:text="${ingr.unit }"></td>
 									<td><button type="button" class="btn btn-primary CheckBox"
 											data-row-id="row_${rowStat.index}"
-											th:attr="data-board-num=${board.num}" style="width:120px;">미보유</button></td>
+											th:attr="data-board-num=${board.num}" style="width: 120px;">미보유</button></td>
 								</tr>
 							</tbody>
 						</table>
@@ -135,7 +136,8 @@ body {
 					<div class="mb-3 mt-3">
 						<label for="content">TOTALPRICE</label>
 						<textarea class="form-control" id="total" name="total"
-							readonly="readonly" th:text="${total+' 원'}" style="resize: none; width: 20%; height: 75px;"></textarea>
+							readonly="readonly" th:text="${total+' 원'}"
+							style="resize: none; width: 20%; height: 75px;"></textarea>
 					</div>
 				</form>
 				<div th:if="${#authorization.expression('hasRole(''ADMIN'')')}"></div>
@@ -169,8 +171,9 @@ body {
 			<!-- 게시글 번호 추가 -->
 			<br>
 			<!-- 댓글 내용 입력 -->
-			<label for="content">내용:</label><br>
-			<textarea id="content" name="content" rows="4" cols="50"></textarea>
+			<label for="commentContent">내용:</label><br>
+			<textarea id="commentContent" name="commentContent" rows="4"
+				cols="50"></textarea>
 			<br> <br>
 			<!-- 댓글 작성 버튼 -->
 			<button type="submit" th:attr="data-board-num=${board.num}">댓글
@@ -193,8 +196,8 @@ body {
 
 				// 폼 데이터를 JSON 형식으로 직렬화
 				var formData = {
-					writer : $('#writer').val(),
-					content : $('#content').val(),
+					writer : $('#username').val(),
+					content : $('#commentContent').val(),
 					regdate : new Date().toISOString(),
 					boardNum : $('#boardNum').val()
 				// 게시글 번호 가져오기
@@ -204,12 +207,15 @@ body {
 				var jsonData = JSON.stringify(formData);
 
 				// boardNum 값 확인
+				console.log(formData.writer);
+				console.log(formData.content);
+				console.log(formData.regdate);
 				console.log(formData.boardNum);
 
 				// AJAX를 이용해 서버로 데이터 전송
 				$.ajax({
 					type : 'POST',
-					url : '/comments/' + formData.boardNum,
+					url : '/comments',
 					data : jsonData,
 					processData : false,
 					contentType : 'application/json;charset=utf-8',
