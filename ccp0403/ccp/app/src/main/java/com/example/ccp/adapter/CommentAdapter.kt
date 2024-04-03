@@ -49,7 +49,10 @@ class CommentAdapter(
 
         fun bind(comment: CommentDTO) {
             commentWriterTextView.text = comment.writerUsername
+            Log.d("comment.writerUsername","${comment.writerUsername}")
+            Log.d("commentWriterTextView","${commentWriterTextView.text}")
             commentContentTextView.text = comment.content
+            Log.d("commentContentTextView","${commentContentTextView.text}")
             commentTimeTextView.text = comment.regdate.toString()
 
             // 댓글 삭제 버튼 클릭 이벤트 처리
@@ -87,6 +90,8 @@ class CommentAdapter(
                 }
                 // 수정 버튼 한번 더 누르기
                 else {
+                    // 댓글 수정 함수
+                    updateCommentToServer(comment.cnum)
                     // 기존 댓글 표시 보이기, 삭제 버튼 보이기
                     textView.visibility = View.VISIBLE
                     linkDeleteComment.visibility = View.VISIBLE
@@ -95,8 +100,6 @@ class CommentAdapter(
                     linkCancelEdit.visibility = View.GONE
                     // 편집창 텍스트 초기화
                     editText.text = null
-                    // 댓글 수정 함수
-                    updateCommentToServer(comment.cnum)
 
                 }
             }
@@ -110,6 +113,7 @@ class CommentAdapter(
                 linkCancelEdit.visibility = View.GONE
                 // 편집창 텍스트 초기화
                 editText.text = null
+                updateCommentToServer(comment.cnum)
             }
         }
 
@@ -139,7 +143,40 @@ class CommentAdapter(
 
         // 댓글 수정 함수
         private fun updateCommentToServer(cnum: Long?) {
-            Log.d("댓글 수정","댓글 수정 함수 실행")
+            val updatedContent = editText.text.toString().trim() // EditText에서 사용자가 입력한 수정된 댓글 내용 가져오기
+
+            if (updatedContent.isNotEmpty()) {
+                cnum?.let { cnumNotNull ->
+                    val updatedComment = CommentDTO(content = updatedContent) // 수정된 댓글 내용을 포함한 CommentDTO 객체 생성
+                    commentService.updateComments(cnumNotNull.toInt(), updatedComment).enqueue(object : Callback<CommentDTO> {
+                        override fun onResponse(call: Call<CommentDTO>, response: Response<CommentDTO>) {
+                            if (response.isSuccessful) {
+                                val updatedCommentResponse = response.body()
+                                if (updatedCommentResponse != null) {
+                                    // 서버에서 수정된 댓글 정보를 받아온 경우
+                                    // 해당 댓글을 RecyclerView에서 갱신
+                                    val newList = commentList.toMutableList()
+                                    val index = newList.indexOfFirst { it.cnum == cnumNotNull }
+                                    if (index != -1) {
+                                        newList[index] = updatedCommentResponse
+                                        updateData(newList)
+                                    }
+                                }
+                                Toast.makeText(context, "댓글이 성공적으로 수정되었습니다.", Toast.LENGTH_SHORT).show()
+                            } else {
+                                Toast.makeText(context, "댓글 수정에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+
+                        override fun onFailure(call: Call<CommentDTO>, t: Throwable) {
+                            Log.e("CommentAdapter", "댓글 수정 실패", t)
+                            Toast.makeText(context, "네트워크 오류로 댓글 수정에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                        }
+                    })
+                }
+            } else {
+                Toast.makeText(context, "댓글 내용을 입력해주세요.", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
