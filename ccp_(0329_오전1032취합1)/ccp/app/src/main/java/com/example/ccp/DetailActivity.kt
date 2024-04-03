@@ -66,6 +66,7 @@ class DetailActivity : AppCompatActivity() {
         // 댓글 관련 변수
         val addCommentButton: Button = findViewById(R.id.addComment)
         val inputComment: EditText = findViewById(R.id.inputComment)
+
         // 댓글 작성 버튼 클릭 이벤트 처리
         addCommentButton.setOnClickListener {
             val commentContent = inputComment.text.toString().trim()
@@ -73,6 +74,7 @@ class DetailActivity : AppCompatActivity() {
                 // 댓글 내용이 비어 있지 않은 경우에만 서버로 전송
                 addCommentToServer(commentContent, num)
             }
+            inputComment.text=null
         }
 
     }
@@ -125,7 +127,7 @@ class DetailActivity : AppCompatActivity() {
                 if (boardData != null) {
                     // 댓글 작성 시 필요한 데이터 생성 (예: 작성자 이름, 내용)
                     val commentDTO = CommentDTO(
-                        writerUsername = "댓글 작성자", // 실제 사용자명으로 대체해야 함
+                        writerUsername = "댓글_작성자", // 실제 사용자명으로 대체해야 함
                         content = commentContent,
                         boardBnum = boardData.num
                     )
