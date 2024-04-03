@@ -3,6 +3,8 @@ package com.ccp5.dto;
 import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -23,6 +25,7 @@ public class CommentDTO {
     
     @ManyToOne
     @JoinColumn(name="userId")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User writer;
     
     private String content;
@@ -34,6 +37,7 @@ public class CommentDTO {
     
     @ManyToOne
     @JoinColumn(name ="bnum")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Board board;
 
     public Long getCnum() {
