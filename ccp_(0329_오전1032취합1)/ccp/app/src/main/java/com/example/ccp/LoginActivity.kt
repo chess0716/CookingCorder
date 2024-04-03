@@ -19,7 +19,6 @@ class LoginActivity : AppCompatActivity() {
 
     private lateinit var userService: UserService
     private lateinit var binding: ActivityLoginBinding
-    private lateinit var user:User
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,12 +55,24 @@ class LoginActivity : AppCompatActivity() {
                 response: Response<LoginResponse?>
             ) {
                 if (response.isSuccessful) {
-                    Toast.makeText(this@LoginActivity, "로그인 성공", Toast.LENGTH_SHORT).show()
-                    // 로그인이 성공하면 MainActivity로 이동하고, 로그인 상태를 전달
-                    val intent = Intent(this@LoginActivity, MainActivity::class.java)
-                    intent.putExtra("isLoggedIn", true)
-                    startActivity(intent)
-                    finish() // 로그인 액티비티 종료
+                    val loginResponse = response.body()
+                    Log.d("loginResponse",loginResponse.toString())
+                    if (loginResponse != null) {
+                        // 로그인이 성공한 경우 사용자 정보를 가져와서 사용할 수 있음
+                        val user = loginResponse.user
+                        Toast.makeText(this@LoginActivity, "로그인 성공", Toast.LENGTH_SHORT).show()
+                        // 로그인이 성공하면 MainActivity로 이동하고, 로그인 상태와 사용자 정보를 전달
+                        Log.d("로그인 성공시 유저 정보","$user")
+                        val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                        val intentToDetailActivity=Intent(this@LoginActivity, DetailActivity::class.java)
+                        intent.putExtra("isLoggedIn", true)
+                        intent.putExtra("user", user) // 사용자 데이터를 인텐트에 추가
+                        intentToDetailActivity.putExtra("user",user) // 사용자 데이터를 디테일 액티비티로
+                        startActivity(intent)
+                        finish() // 로그인 액티비티 종료
+                    } else {
+                        Toast.makeText(this@LoginActivity, "로그인 실패", Toast.LENGTH_SHORT).show()
+                    }
                 } else {
                     Toast.makeText(this@LoginActivity, "로그인 실패", Toast.LENGTH_SHORT).show()
                 }

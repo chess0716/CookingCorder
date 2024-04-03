@@ -34,7 +34,7 @@ public class User implements UserDetails {
     private Long id;
     
     @Column(nullable = false)
-    private String username;
+    private String username; // 댓글 작성자 이름으로
     private String name;
     private String password;
     

@@ -52,6 +52,8 @@ public class UserApiController {
 	public ResponseEntity<String> loginProcess(@RequestBody Map<String, String> credentials, HttpSession session) {
 		String username = credentials.get("username");
 		String password = credentials.get("password");
+		System.out.println("username : "+username);
+		System.out.println("password : "+password);
 
 		logger.info("Attempting login for username: {}", username); // 로그 출력
 		User user = userRepository.findByUsername(username);
@@ -61,10 +63,12 @@ public class UserApiController {
 
 			Map<String, Object> responseMap = new HashMap<>();
 			responseMap.put("message", "Login successful");
+			responseMap.put("user", user);
 
 			String jsonResponse;
 			try {
 				jsonResponse = objectMapper.writeValueAsString(responseMap);
+				System.out.println("responseMap : "+responseMap);
 			} catch (JsonProcessingException e) {
 				log.error("Error converting response to JSON", e);
 				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

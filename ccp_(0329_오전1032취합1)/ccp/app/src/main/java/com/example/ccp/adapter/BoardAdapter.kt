@@ -32,7 +32,7 @@ class BoardAdapter(private val context: Context, private var boards: List<BoardD
 
             // 이미지 URL에 타임스탬프 추가
             val imageUrl = board.imageUrl?.let {
-                "http://10.100.103.73:8005$it?timestamp=${System.currentTimeMillis()}" // 서버 주소와 이미지 경로 수정, 타임스탬프 추가
+                "http://10.100.103.42:8005$it?timestamp=${System.currentTimeMillis()}" // 서버 주소와 이미지 경로 수정, 타임스탬프 추가
             }
 
             if (!imageUrl.isNullOrEmpty()) {

@@ -46,7 +46,7 @@ class DetailActivity : AppCompatActivity() {
         if (num != -1) {
             loadData(num)
             setupWebView(num)
-            Log.d("웹뷰","${setupWebView(num)}")
+            Log.d("웹뷰", "${setupWebView(num)}")
             loadComments(num)
             // 재료 목록 관련
             loadIngredients(num)
@@ -66,24 +66,31 @@ class DetailActivity : AppCompatActivity() {
         // 댓글 관련 변수
         val addCommentButton: Button = findViewById(R.id.addComment)
         val inputComment: EditText = findViewById(R.id.inputComment)
+        // Intent에서 사용자 정보 받기
+        val user = intent.getParcelableExtra<User>("user")
+        Log.d("로그인된 유저 정보 확인", "Received user data: $user")
 
         // 댓글 작성 버튼 클릭 이벤트 처리
         addCommentButton.setOnClickListener {
             val commentContent = inputComment.text.toString().trim()
             if (commentContent.isNotEmpty()) {
                 // 댓글 내용이 비어 있지 않은 경우에만 서버로 전송
-                addCommentToServer(commentContent, num)
+                if (user != null) {
+                    addCommentToServer(commentContent, num, user)
+                }
             }
-            inputComment.text=null
+            inputComment.text = null
         }
 
     }
+
     private fun setupWebView(num: Int) {
         val webView = binding.webviewDetail
         webView.settings.javaScriptEnabled = true // JavaScript 활성화
         webView.webViewClient = WebViewClient()
         webView.loadUrl("http://10.100.103:42:8005/ingredient/$num") // 해당 URL 로드
     }
+
     // 서버로부터 게시글 데이터 불러오기
     private fun loadData(num: Int) {
         apiService.getBoardByNum(num)?.enqueue(object : Callback<BoardDTO?> {
@@ -93,7 +100,7 @@ class DetailActivity : AppCompatActivity() {
                     val title = board.title
                     val user = board.writer
                     val content = board.content
-                    Log.d("AndroidBoardNum","${board.num}")
+                    Log.d("AndroidBoardNum", "${board.num}")
 
                     // UI 업데이트
                     updateUI(title, user, content)
@@ -118,7 +125,7 @@ class DetailActivity : AppCompatActivity() {
     }
 
     // 서버로 댓글 추가 요청을 보내는 함수
-    private fun addCommentToServer(commentContent: String, boardNum: Int) {
+    private fun addCommentToServer(commentContent: String, boardNum: Int, user: User) {
         // 게시글 번호를 사용하여 게시글 정보를 가져오기
         val board = apiService.getBoardByNum(boardNum)
         board?.enqueue(object : Callback<BoardDTO?> {
@@ -127,33 +134,34 @@ class DetailActivity : AppCompatActivity() {
                 if (boardData != null) {
                     // 댓글 작성 시 필요한 데이터 생성 (예: 작성자 이름, 내용)
                     val commentDTO = CommentDTO(
-                        writerUsername = "댓글_작성자", // 실제 사용자명으로 대체해야 함
+                        writerUsername = user?.username ?: "댓글_작성자", // 사용자명이 없을 경우 기본값으로 설정
                         content = commentContent,
                         boardBnum = boardData.num
                     )
                     // 서버로 댓글 추가 요청 보내기
-                    commentService.addComments(commentDTO, boardNum).enqueue(object : Callback<Void> {
-                        override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                            if (response.isSuccessful) {
-                                // 성공적으로 댓글이 서버에 추가된 경우
-                                // 필요한 작업 수행 (예: 성공 메시지 표시, 화면 갱신 등)
-                                Log.d("comment", commentDTO.toString())
-                                Log.d("DetailActivity", "댓글이 성공적으로 추가되었습니다.")
-                                loadComments(boardNum)
-                                // 예시: 댓글 추가 후 화면을 갱신하거나 다른 작업 수행
-                            } else {
-                                // 서버로부터 실패 응답을 받은 경우
-                                // 오류 처리 (예: 실패 메시지 표시)
-                                Log.e("DetailActivity", "댓글 추가 실패: ${response.message()}")
+                    commentService.addComments(commentDTO, boardNum, user)
+                        .enqueue(object : Callback<Void> {
+                            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                                if (response.isSuccessful) {
+                                    // 성공적으로 댓글이 서버에 추가된 경우
+                                    // 필요한 작업 수행 (예: 성공 메시지 표시, 화면 갱신 등)
+                                    Log.d("comment", commentDTO.toString())
+                                    Log.d("DetailActivity", "댓글이 성공적으로 추가되었습니다.")
+                                    loadComments(boardNum)
+                                    // 예시: 댓글 추가 후 화면을 갱신하거나 다른 작업 수행
+                                } else {
+                                    // 서버로부터 실패 응답을 받은 경우
+                                    // 오류 처리 (예: 실패 메시지 표시)
+                                    Log.e("DetailActivity", "댓글 추가 실패: ${response.message()}")
+                                }
                             }
-                        }
 
-                        override fun onFailure(call: Call<Void>, t: Throwable) {
-                            // 통신 실패 시의 처리
-                            // 오류 처리 (예: 네트워크 오류 메시지 표시)
-                            Log.e("DetailActivity", "댓글 추가 실패: ${t.message}")
-                        }
-                    })
+                            override fun onFailure(call: Call<Void>, t: Throwable) {
+                                // 통신 실패 시의 처리
+                                // 오류 처리 (예: 네트워크 오류 메시지 표시)
+                                Log.e("DetailActivity", "댓글 추가 실패: ${t.message}")
+                            }
+                        })
                 } else {
                     Log.e("DetailActivity", "Failed to load board data")
                 }
@@ -191,6 +199,7 @@ class DetailActivity : AppCompatActivity() {
             }
         })
     }
+
     // 댓글창 불러오기
     private fun displayComments(comment: List<CommentDTO>) {
         // RecyclerView에 연결할 어댑터 생성
@@ -215,6 +224,7 @@ class DetailActivity : AppCompatActivity() {
 
         return super.onTouchEvent(event)
     }
+
     // 서버로부터 입력받은 재료 목록 불러오기
     private fun loadIngredients(num: Int) {
         apiService.getIngredientsForBoard(num).enqueue(object : Callback<List<IngrBoard>> {
@@ -277,6 +287,7 @@ class DetailActivity : AppCompatActivity() {
             }
         })
     }
+
     // 재료 총 가격 출력
     private fun displayTotalPrice(totalPrice: Int?) {
         if (totalPrice != null) {

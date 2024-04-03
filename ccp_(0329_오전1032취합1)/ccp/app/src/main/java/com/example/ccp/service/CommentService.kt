@@ -1,6 +1,7 @@
 package com.example.ccp.service
 
 import com.example.ccp.model.CommentDTO
+import com.example.ccp.model.User
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -17,7 +18,7 @@ interface CommentService {
 
     // 댓글 작성
     @POST("/api/comments")
-    fun addComments(@Body commentDTO: CommentDTO, @Query("boardNum") boardNum: Int): Call<Void>
+    fun addComments(@Body commentDTO: CommentDTO, @Query("boardNum") boardNum: Int, @Body username: User): Call<Void>
 
     // 댓글 수정
     @PUT("/api/comments/{cnum}")

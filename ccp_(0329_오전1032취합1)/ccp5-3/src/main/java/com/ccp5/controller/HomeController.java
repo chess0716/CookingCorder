@@ -52,6 +52,16 @@ public class HomeController {
         model.addAttribute("total", totalPrice); // "total" 키를 사용하여 총 가격을 전달
         return "view";
     }
+    @GetMapping("/ingredient/{num}")
+    public String ingredient(@PathVariable("num") int num, Model model) {
+        BoardDTO board = boardService.getBoardByNum(num);
+        List<IngrBoard> ingrBoards = ilService.findByTitle(board.getTitle());
+        Integer totalPrice = boardRepository.calculateTotalPriceByNum(num);
+        model.addAttribute("board", board);
+        model.addAttribute("ingrBoards", ingrBoards);
+        model.addAttribute("total", totalPrice); // "total" 키를 사용하여 총 가격을 전달
+        return "ingredient";
+    }
     
     // 레시피 등록
     @GetMapping("/insert")
