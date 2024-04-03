@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ccp5.dto.Board;
 import com.ccp5.dto.CommentDTO;
+import com.ccp5.dto.User;
 import com.ccp5.repository.BoardRepository;
+import com.ccp5.repository.UserRepository;
 import com.ccp5.service.CommentService;
 
 @RestController
@@ -29,6 +31,8 @@ public class CommentApiController {
 	private CommentService commentService;
 	@Autowired
 	private BoardRepository boardRepository;
+	@Autowired
+	private UserRepository userRepository;
 
 	// 댓글창 출력
 	@GetMapping
@@ -44,12 +48,14 @@ public class CommentApiController {
 	// 댓글 작성
 	@PostMapping
 	public ResponseEntity<CommentDTO> createComment(@RequestBody CommentDTO comment,
-			@RequestParam("boardNum") int boardNum) {
+			@RequestParam("boardNum") int boardNum, @RequestParam("username") String username) {
 		Board board = boardRepository.findByNum(boardNum);
+		User user = userRepository.findByUsername(username);
 		if (board == null) {
 			return ResponseEntity.notFound().build(); // 해당 boardNum에 해당하는 게시글을 찾을 수 없을 경우, 404 응답 반환
 		}
 		comment.setBoard(board);
+		comment.setWriter(user);
 		commentService.createComment(comment);
 		return ResponseEntity.status(HttpStatus.CREATED).body(comment);
 	}

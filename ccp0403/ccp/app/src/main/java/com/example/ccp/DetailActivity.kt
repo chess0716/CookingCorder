@@ -10,7 +10,6 @@ import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.ccp.adapter.CommentAdapter
-import com.example.ccp.adapter.IngrBoardAdapter
 import com.example.ccp.databinding.ActivityDetailBinding
 import com.example.ccp.model.BoardDTO
 import com.example.ccp.model.CommentDTO
@@ -18,8 +17,8 @@ import com.example.ccp.model.IngrBoard
 import com.example.ccp.model.User
 import com.example.ccp.service.ApiService
 import com.example.ccp.service.CommentService
-import com.example.ccp.service.UpdatePriceRequest
 import com.example.ccp.util.RetrofitClient
+import com.example.ccp.util.SharedPreferencesHelper
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -47,6 +46,15 @@ class DetailActivity : AppCompatActivity() {
             setupWebView(num) // 웹뷰 설정 메서드 호출
             loadComments(num)
         }
+
+        // SharedPreferences 에서 로그인 정보 읽어오기
+        val userId = SharedPreferencesHelper.getUserId(applicationContext)
+        val username = SharedPreferencesHelper.getUsername(applicationContext)
+
+        // 가져온 정보를 이용하여 원하는 작업 수행
+        Log.d("상세보기에서 로그인 정보 불러오기", "사용자 ID: $userId")
+        Log.d("상세보기에서 로그인 정보 불러오기", "사용자 이름: $username")
+
         // 수정페이지로 이동하기
         binding.btnGoUpdate.setOnClickListener {
             val intent = Intent(this@DetailActivity, UpdateActivity::class.java)
@@ -66,7 +74,9 @@ class DetailActivity : AppCompatActivity() {
             val commentContent = inputComment.text.toString().trim()
             if (commentContent.isNotEmpty()) {
                 // 댓글 내용이 비어 있지 않은 경우에만 서버로 전송
-                addCommentToServer(commentContent, num)
+                if (username != null) {
+                    addCommentToServer(commentContent, num, username)
+                }
             }
             inputComment.text = null
         }
@@ -106,7 +116,7 @@ class DetailActivity : AppCompatActivity() {
     }
 
     // 서버로 댓글 추가 요청을 보내는 함수
-    private fun addCommentToServer(commentContent: String, boardNum: Int) {
+    private fun addCommentToServer(commentContent: String, boardNum: Int, username:String) {
         // 게시글 번호를 사용하여 게시글 정보를 가져오기
         val board = apiService.getBoardByNum(boardNum)
         board?.enqueue(object : Callback<BoardDTO?> {
@@ -115,12 +125,13 @@ class DetailActivity : AppCompatActivity() {
                 if (boardData != null) {
                     // 댓글 작성 시 필요한 데이터 생성 (예: 작성자 이름, 내용)
                     val commentDTO = CommentDTO(
-                        writerUsername = "댓글_작성자", // 사용자명이 없을 경우 기본값으로 설정
+                        writerUsername = username, // 사용자명이 없을 경우 기본값으로 설정
                         content = commentContent,
                         boardBnum = boardData.num
                     )
+                    Log.d("commnetDTO출력","$commentDTO")
                     // 서버로 댓글 추가 요청 보내기
-                    commentService.addComments(commentDTO, boardNum)
+                    commentService.addComments(commentDTO, boardNum, username)
                         .enqueue(object : Callback<Void> {
                             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                                 if (response.isSuccessful) {

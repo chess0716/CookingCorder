@@ -48,6 +48,13 @@ class LoginActivity : AppCompatActivity() {
                     val loginResponse = response.body()!!
                     Log.d(TAG, "로그인 성공: ${loginResponse.message}")
 
+                    // SharedPreferences에 로그인 정보 저장
+                    SharedPreferencesHelper.saveLoginInfo(
+                        applicationContext,
+                        loginResponse.userId,
+                        loginResponse.username,
+                        loginResponse.token
+                    )
 
                     SharedPreferencesHelper.saveLoginInfo(applicationContext, loginResponse.userId, loginResponse.username, loginResponse.token)
 

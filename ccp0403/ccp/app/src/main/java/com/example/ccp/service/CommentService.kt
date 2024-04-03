@@ -18,7 +18,7 @@ interface CommentService {
 
     // 댓글 작성
     @POST("/api/comments")
-    fun addComments(@Body commentDTO: CommentDTO, @Query("boardNum") boardNum: Int): Call<Void>
+    fun addComments(@Body commentDTO: CommentDTO, @Query("boardNum") boardNum: Int, @Query("username") username:String): Call<Void>
 
     // 댓글 수정
     @PUT("/api/comments/{cnum}")
