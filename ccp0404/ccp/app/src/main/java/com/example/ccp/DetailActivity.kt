@@ -62,7 +62,7 @@ class DetailActivity : AppCompatActivity() {
         // 수정페이지로 이동하기
         binding.btnGoUpdate.setOnClickListener {
             val intent = Intent(this@DetailActivity, UpdateActivity::class.java)
-            // 필요하다면 업데이트에 필요한 데이터를 추가할 수 있습니다.
+            intent.putExtra("board_id", num)
             startActivity(intent)
         }
 
@@ -180,6 +180,8 @@ class DetailActivity : AppCompatActivity() {
 
     // 서버로 댓글 추가 요청을 보내는 함수
     private fun addCommentToServer(commentContent: String, boardNum: Int, username: String) {
+        val username = SharedPreferencesHelper.getUsername(this@DetailActivity) ?: ""
+        Log.d("SharedPreferencesHelper",username)
         // 게시글 번호를 사용하여 게시글 정보를 가져오기
         val board = apiService.getBoardByNum(boardNum)
         board?.enqueue(object : Callback<BoardDTO?> {
