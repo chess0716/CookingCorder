@@ -10,7 +10,6 @@ import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.ccp.adapter.CommentAdapter
-import com.example.ccp.adapter.IngrBoardAdapter
 import com.example.ccp.databinding.ActivityDetailBinding
 import com.example.ccp.model.BoardDTO
 import com.example.ccp.model.CommentDTO
@@ -162,18 +161,45 @@ class DetailActivity : AppCompatActivity() {
 
     // 작성글을 삭제
     private fun deleteDetail(num: Int) {
+        // 게시글을 가져오는 요청
         val board: Call<BoardDTO> = apiService.getBoardByNum(num)
-        board?.enqueue(object : Callback<BoardDTO> {
+        board.enqueue(object : Callback<BoardDTO> {
             override fun onResponse(call: Call<BoardDTO>, response: Response<BoardDTO>) {
-                val boardData: BoardDTO? = response.body()
-                Log.d("게시글 삭제 과정", "$boardData")
-                if (boardData != null){
-//                    apiService.
+                if (response.isSuccessful) {
+                    val boardData: BoardDTO? = response.body()
+                    Log.d("게시글 삭제 과정", "$boardData")
+                    // 게시글을 가져온 후 삭제 요청
+                    if (boardData != null) {
+                        val deleteCall: Call<Void> = apiService.deleteBoard(num, boardData.title)
+                        deleteCall.enqueue(object : Callback<Void> {
+                            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                                if (response.isSuccessful) {
+                                    // 게시글 삭제 성공
+                                    Log.d("게시글 삭제", "게시글이 성공적으로 삭제되었습니다.")
+                                } else {
+                                    // 게시글 삭제 실패
+                                    Log.e("게시글 삭제", "게시글 삭제에 실패했습니다.")
+                                }
+                            }
+
+                            override fun onFailure(call: Call<Void>, t: Throwable) {
+                                // 통신 실패
+                                Log.e("게시글 삭제", "통신 실패: ${t.message}")
+                            }
+                        })
+                    } else {
+                        // 가져온 게시글이 null인 경우
+                        Log.e("게시글 삭제", "게시글이 존재하지 않습니다.")
+                    }
+                } else {
+                    // 서버 응답이 실패인 경우
+                    Log.e("게시글 삭제", "게시글 가져오기 실패: ${response.code()}")
                 }
             }
 
             override fun onFailure(call: Call<BoardDTO>, t: Throwable) {
-                TODO("Not yet implemented")
+                // 통신 실패
+                Log.e("게시글 삭제", "통신 실패: ${t.message}")
             }
         })
     }
@@ -271,6 +297,6 @@ class DetailActivity : AppCompatActivity() {
         val webView = binding.webviewDetail
         webView.settings.javaScriptEnabled = true // JavaScript 활성화
         webView.webViewClient = WebViewClient()
-        webView.loadUrl("http://211.220.34.225:8005/ingredient/$num") // 해당 URL 로드
+        webView.loadUrl("http://10.100.103.42:8005/ingredient/$num") // 해당 URL 로드
     }
 }

@@ -156,9 +156,9 @@ public class IngrApiController {
 
     // 레시피 및 재료 삭제
     @DeleteMapping("/api/delete/{num}")
-    public ResponseEntity<Integer> deleteRecipe(@PathVariable int num, @RequestBody Map<String, String> requestBody) {
-        String title = requestBody.get("title");
+    public ResponseEntity<Void> deleteRecipe(@PathVariable int num, @RequestParam("title") String title) {
+        System.out.println("delete title : " + title);
         boardService.deleteRecipe(num, title);
-        return ResponseEntity.ok(num);
+        return ResponseEntity.ok().build();
     }
 }
