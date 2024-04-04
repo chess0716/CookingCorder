@@ -8,6 +8,7 @@ import com.example.ccp.model.UserResponse
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
@@ -28,6 +29,8 @@ interface ApiService : UserService {
     @POST("/api/boards")
     fun insertBoard(@Body boardDTO: BoardDTO?): Call<Void?>?
 
+    @DELETE("/api/delete/{num}")
+    fun deleteBoard(@Path("num") num: Int, @Query("title") title: String): Call<Void>
 
     @POST("/api/join")
     override fun join(@Body user: User?): Call<UserResponse?>?

@@ -16,6 +16,7 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
+
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
@@ -27,7 +28,6 @@ import com.example.ccp.model.BoardDTO
 import com.example.ccp.model.Category
 import com.example.ccp.service.ApiService
 import com.example.ccp.util.RetrofitClient
-import com.example.ccp.util.RetrofitClient.ingrService
 import com.example.ccp.util.SharedPreferencesHelper
 import com.google.android.material.navigation.NavigationView
 import retrofit2.Call
@@ -64,11 +64,6 @@ class MainActivity : AppCompatActivity() {
         // 로그인 상태 확인 및 UI 업데이트
         updateLoginStatus()
         setupButtonListeners()
-
-
-
-
-
 
 
         binding.appBarMain.fab.setOnClickListener { view ->

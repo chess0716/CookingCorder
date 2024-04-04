@@ -8,6 +8,11 @@ import android.webkit.WebViewClient
 import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.navigation.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.ccp.adapter.CommentAdapter
 import com.example.ccp.databinding.ActivityDetailBinding
@@ -22,11 +27,13 @@ import com.example.ccp.util.RetrofitClient
 import com.example.ccp.util.RetrofitClient.commentService
 import com.example.ccp.util.RetrofitClient.myPageService
 import com.example.ccp.util.SharedPreferencesHelper
+import com.google.android.material.navigation.NavigationView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class DetailActivity : AppCompatActivity() {
+    private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityDetailBinding
     private lateinit var apiService: ApiService
     private var totalPrice: Int = 0
@@ -38,6 +45,7 @@ class DetailActivity : AppCompatActivity() {
         binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setSupportActionBar(binding.appBarAnother.toolbarAnother)
         apiService = RetrofitClient.apiService
 
         val num = intent.getIntExtra("board_id", -1) // 보드 번호 초기화
