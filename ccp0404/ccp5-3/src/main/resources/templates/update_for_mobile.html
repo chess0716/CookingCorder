@@ -11,7 +11,7 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
         body {
-            margin: 10%;
+            margin: 5%;
         }
     </style>
 </head>
@@ -243,7 +243,7 @@
 				// 성공 시 처리할 내용
 				console.log(response);
 				// 페이지를 리다이렉트
-				window.location.href = '/index'; // 리다이렉트할 페이지의 경로
+				Android.redirectToMainActivity(); // 리다이렉트할 페이지의 경로
 			},
 			error : function(xhr, status, error) {
 				// 에러 처리
@@ -272,7 +272,7 @@
 				// 성공 시 처리할 내용
 				console.log(response);
 				// 페이지를 리다이렉트
-				window.location.href = '/index'; // 리다이렉트할 페이지의 경로
+				Android.redirectToMainActivity(); // 리다이렉트할 페이지의 경로
 			},
 			error : function(xhr, status, error) {
 				// 에러 처리
