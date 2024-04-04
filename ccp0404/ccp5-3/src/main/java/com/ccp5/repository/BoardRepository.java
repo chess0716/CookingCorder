@@ -35,6 +35,6 @@ public interface BoardRepository extends JpaRepository<Board, Integer> {
     
     List<Board> findByWriter(User writer);
     
-	
+    Board findByNum(int boardNum);
     
 }

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ccp5.dto.Comment;
+import com.ccp5.dto.CommentDTO;
 import com.ccp5.service.CommentService;
 
 @RestController
@@ -26,8 +26,8 @@ public class CommentController {
     private CommentService commentService;
 
     @GetMapping
-    public ResponseEntity<List<Comment>> getAllComments() {
-        List<Comment> comments = commentService.getAllComments();
+    public ResponseEntity<List<CommentDTO>> getAllComments() {
+        List<CommentDTO> comments = commentService.getAllComments();
         if (!comments.isEmpty()) {
             return ResponseEntity.ok(comments);
         } else {
@@ -36,14 +36,14 @@ public class CommentController {
     }
 
     @PostMapping
-    public ResponseEntity<Comment> createComment(@ModelAttribute Comment comment) {
+    public ResponseEntity<CommentDTO> createComment(@ModelAttribute CommentDTO comment) {
         commentService.createComment(comment);
         return ResponseEntity.status(HttpStatus.CREATED).body(comment);
     }
 
     @PutMapping("/{cnum}")
-    public ResponseEntity<Comment> updateComment(@PathVariable Long cnum, @RequestBody Comment updatedComment) {
-        Comment comment = commentService.getComment(cnum);
+    public ResponseEntity<CommentDTO> updateComment(@PathVariable Long cnum, @RequestBody CommentDTO updatedComment) {
+        CommentDTO comment = commentService.getComment(cnum);
         if (comment != null) {
             commentService.updateComment(cnum, updatedComment);
             return ResponseEntity.ok(updatedComment);
@@ -54,7 +54,7 @@ public class CommentController {
 
     @DeleteMapping("/{cnum}")
     public ResponseEntity<Void> deleteComment(@PathVariable Long cnum) {
-        Comment comment = commentService.getComment(cnum);
+        CommentDTO comment = commentService.getComment(cnum);
         if (comment != null) {
             commentService.deleteComment(cnum);
             return ResponseEntity.noContent().build();

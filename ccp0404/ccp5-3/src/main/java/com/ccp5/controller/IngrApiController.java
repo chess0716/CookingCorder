@@ -46,7 +46,8 @@ public class IngrApiController {
     private BoardService boardService;
     @Autowired
     private CategoryService categoryService;
-    private final UserService userService;
+    @Autowired
+    UserService userService;
 
     @GetMapping(path = "/api/get_names", produces = MediaType.APPLICATION_JSON_VALUE)// 서버가 미디어타입을 text/plain 으로 받아서 수정
     public ResponseEntity<String> getNamesByCategory(@RequestParam(value = "categoryId", required = false) String categoryId) {

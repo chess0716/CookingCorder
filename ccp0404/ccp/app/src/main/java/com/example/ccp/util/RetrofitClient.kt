@@ -1,6 +1,7 @@
 package com.example.ccp.util
 
 import com.example.ccp.service.ApiService
+import com.example.ccp.service.CommentService
 import com.example.ccp.service.IngrService
 import com.example.ccp.service.MyPageService
 import com.example.ccp.service.UserService
@@ -10,7 +11,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitClient {
-    private const val BASE_URL = "http://211.220.34.225:8005/"
+    private const val BASE_URL = "http://10.100.103.73:8005/"
 
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
@@ -47,9 +48,12 @@ object RetrofitClient {
     val userService: UserService by lazy {
         userServiceRetrofit.create(UserService::class.java)
     }
+
     val myPageService: MyPageService by lazy {
         retrofit.create(MyPageService::class.java)
     }
 
+    val commentService: CommentService by lazy {
+        retrofit.create(CommentService::class.java)
+    }
 }
-

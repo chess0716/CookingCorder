@@ -121,7 +121,7 @@
 										</td>
 										<td><button type="button" class="btn btn-primary CheckBox"
 												data-row-id="row_${rowStat.index}"
-												th:attr="data-board-num=${board.num}">미보유</button></td>
+												th:attr="data-board-num=${board.num}" style="width:120px;">미보유</button></td>
 									</tr>
 								</tbody>
 							</table>
@@ -129,7 +129,7 @@
 						<div class="mb-3 mt-3">
 							<label for="content">TOTALPRICE</label>
 							<textarea class="form-control" id="total" name="total"
-								readonly="readonly" th:text="${total+' 원'}"></textarea>
+								readonly="readonly" th:text="${total+' 원'}" style="resize:none; width:20%; height:75px;"></textarea>
 						</div>
 					</form>
 					<div th:if="${#authorization.expression('hasRole(''ADMIN'')')}"></div>
