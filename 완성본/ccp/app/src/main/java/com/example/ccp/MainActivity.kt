@@ -22,6 +22,7 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.ccp.adapter.BoardAdapter
 import com.example.ccp.databinding.ActivityMainBinding
 
@@ -67,12 +68,14 @@ class MainActivity : AppCompatActivity() {
         // 로그인 상태 확인 및 UI 업데이트
         updateLoginStatus()
         setupButtonListeners()
-        hideKeyboard(activity = this)
 
 
 
 
 
+        binding.btnSort.setOnClickListener {
+            toggleLayout()
+        }
 
 
         binding.appBarMain.fab.setOnClickListener { view ->
@@ -146,7 +149,9 @@ class MainActivity : AppCompatActivity() {
         binding.btnSearch.setOnClickListener {
             val searchQuery = binding.editTextSearch.text.toString()
             searchBoards(searchQuery)
+            hideKeyboard(this) // 사용자가 검색 버튼을 클릭했을 때 키보드를 숨깁니다.
         }
+
         // 0329 로그인 후 로그아웃 버튼 변경 설정
         // 앱이 최초로 시작될 때 로그인 상태에 따라 버튼 표시 변경
         updateButtonVisibility()
@@ -187,6 +192,22 @@ class MainActivity : AppCompatActivity() {
         // 로그인 상태가 변경되었는지 확인하고 UI 업데이트
         updateLoginStatus()
     }
+    var isGrid = true // 초기값은 그리드 레이아웃
+
+    private fun toggleLayout() {
+        isGrid = !isGrid
+        if (isGrid) {
+            binding.recyclerViewBoards.layoutManager = GridLayoutManager(this, 2) // 그리드 레이아웃으로 변경
+            boardAdapter.isGridLayout = true // 어댑터에 그리드 레이아웃으로 변경되었음을 알림
+        } else {
+            binding.recyclerViewBoards.layoutManager = LinearLayoutManager(this) // 리스트 레이아웃으로 변경
+            boardAdapter.isGridLayout = false // 어댑터에 리스트 레이아웃으로 변경되었음을 알림
+        }
+        boardAdapter.notifyDataSetChanged() // 어댑터에 데이터셋 변경 알림
+    }
+
+
+
     private fun setupButtonListeners() {
         binding.appBarMain.homeButton.setOnClickListener {
             // 현재 액티비티를 종료

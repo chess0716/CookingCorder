@@ -27,6 +27,12 @@
         <activity android:name=".RequestActivity"
             android:exported="false"
             android:theme="@style/Theme.Ccp.NoActionBar"/>
+        <activity android:name=".BuyActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Ccp.NoActionBar"/>
+        <activity android:name=".CompleteActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Ccp.NoActionBar"/>
         <activity
             android:name=".MyPageActivity"
             android:exported="false"
